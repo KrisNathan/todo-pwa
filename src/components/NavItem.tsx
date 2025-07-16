@@ -13,7 +13,7 @@ export default function NavItem({to, title, icon }: NavItemProps) {
   const isActive = location.pathname === to;
 
   return (
-    <Link to={to} className={`nav-item active:animate-(--anim-click) ${isActive ? "active" : ""}`}>
+    <Link to={to} className={`nav-item active:animate-(--anim-click) select-none ${isActive ? "active" : ""}`}>
       {icon}
       {title}
     </Link>
