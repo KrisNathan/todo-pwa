@@ -10,7 +10,7 @@ interface IconBtnProps {
 
 export default function IconBtn({ icon, label, className = '', disabled = false, onClick }: IconBtnProps) {
   return (
-    <button className={`icon-btn ${className}`} onClick={onClick} aria-label={label} tabIndex={0} disabled={disabled}>
+    <button className={`icon-btn active:animate-(--anim-click) ${className}`} onClick={onClick} aria-label={label} tabIndex={0} disabled={disabled}>
       {icon}
       {label}
     </button>
