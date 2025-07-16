@@ -69,7 +69,12 @@ export default function TaskCard({
         ]}
       />
       <button
-        onClick={onToggleDone}
+        onClick={() => {
+          if (onToggleDone) {
+            onToggleDone();
+          }
+          navigator.vibrate(50);
+        }}
         onContextMenu={(e) => {
           e.preventDefault();
           handleMenuClick();
