@@ -1,0 +1,20 @@
+
+.icon-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  color: var(--text-default);
+}
+
+.icon-btn:hover {
+  background-color: var(--background-secondary-hover);
+}
+
+.icon-btn.active {
+  background-color: var(--background-secondary-hover);
+  font-weight: 600;
+}

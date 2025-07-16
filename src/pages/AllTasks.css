@@ -1,0 +1,12 @@
+.all-tasks-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.all-tasks-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  color: var(--text-default);
+}
