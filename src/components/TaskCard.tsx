@@ -1,6 +1,6 @@
 import './TaskCard.css'
 import { useState, useEffect, useRef } from 'react'
-import {MdCheckBox, MdCheckBoxOutlineBlank} from 'react-icons/md'
+import { MdCheckBox, MdCheckBoxOutlineBlank, MdStar, MdStarOutline } from 'react-icons/md'
 
 export interface TaskCardProps {
   title: string;
@@ -13,14 +13,14 @@ export interface TaskCardProps {
   onEdit?: () => void;
 }
 
-export default function TaskCard({ 
-  title, 
-  dueDate, 
-  isImportant, 
+export default function TaskCard({
+  title,
+  dueDate,
+  isImportant,
   isDone = false,
   onToggleImportant,
   onToggleDone,
-  onEdit 
+  onEdit
 }: TaskCardProps) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -67,13 +67,14 @@ export default function TaskCard({
         <div className='standard-sub'>{dueDate}</div>
       </div>
       <div className='task-card-actions'>
-        <div 
-          className='star-icon'
-          onClick={onToggleImportant}
-          style={{ color: isImportant ? '#ffa500' : 'var(--text-secondary)' }}
-        >
-          {isImportant ? '★' : '☆'}
-        </div>
+        <span onClick={onToggleImportant} className='cursor-pointer'>
+          {isImportant ?
+            <MdStar size={24} color='#ffa500' />
+            :
+            <MdStarOutline size={24} color='var(--text-secondary)' />
+          }
+        </span>
+
         <div className='task-card-menu-container' ref={dropdownRef}>
           <div className='task-card-menu' onClick={handleMenuClick}>
           </div>
