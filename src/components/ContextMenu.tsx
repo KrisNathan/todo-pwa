@@ -29,7 +29,7 @@
 
 export interface MenuItem {
   label: string;
-  onClick: () => void;
+  onClick?: () => void;
   icon?: React.ReactNode;
 }
 
@@ -38,7 +38,9 @@ const MenuButton = ({ label, onClick, icon }: MenuItem) => (
     className="w-full text-left px-4 py-2 hover:bg-bg-secondary-hover active:animate-(--anim-click) rounded-2xl flex flex-row gap-2 cursor-pointer"
     onClick={(e) => {
       e.stopPropagation();
-      onClick();
+      if (onClick) {
+        onClick();
+      }
     }}
   >
     {icon || <></>}
@@ -46,7 +48,7 @@ const MenuButton = ({ label, onClick, icon }: MenuItem) => (
   </button>
 )
 
-const DesktopMenu = ({ items, position }: { items: MenuItem[]; position?: { x: number; y: number } }) => {
+const DesktopMenu = ({ items, position, onClose }: { items: MenuItem[]; position?: { x: number; y: number }, onClose: () => void }) => {
   const menuWidth = 192; // min-w-48 = 12rem = 192px
   const menuHeight = items.length * 44 + 16; // Approximate height based on items
 
@@ -83,7 +85,16 @@ const DesktopMenu = ({ items, position }: { items: MenuItem[]; position?: { x: n
       <ul className="space-y-2">
         {items.map((item, index) => (
           <li key={index}>
-            <MenuButton label={item.label} onClick={item.onClick} icon={item.icon} />
+            <MenuButton
+              label={item.label}
+              icon={item.icon}
+              onClick={() => {
+                if (item.onClick) {
+                  item.onClick();
+                }
+                onClose();
+              }}
+            />
           </li>
         ))}
       </ul>
@@ -91,7 +102,7 @@ const DesktopMenu = ({ items, position }: { items: MenuItem[]; position?: { x: n
   );
 };
 
-const MobileDrawer = ({ items }: { items: MenuItem[] }) => (
+const MobileDrawer = ({ items, onClose }: { items: MenuItem[], onClose: () => void }) => (
   <div
     className="bg-bg-secondary p-4 shadow-lg rounded-t-2xl w-full max-w-md mb-0"
     onClick={(e) => e.stopPropagation()}
@@ -99,7 +110,16 @@ const MobileDrawer = ({ items }: { items: MenuItem[] }) => (
     <ul className="space-y-2">
       {items.map((item, index) => (
         <li key={index}>
-          <MenuButton label={item.label} onClick={item.onClick} icon={item.icon} />
+          <MenuButton
+            label={item.label}
+            icon={item.icon}
+            onClick={() => {
+              if (item.onClick) {
+                item.onClick();
+              }
+              onClose();
+            }}
+          />
         </li>
       ))}
     </ul>
@@ -119,10 +139,10 @@ export default function ContextMenu({ isOpen, onClose, position, items }: Contex
   return (
     <>
       <div className="hidden md:block fixed inset-0 z-50" onClick={onClose}>
-        <DesktopMenu items={items} position={position} />
+        <DesktopMenu items={items} position={position} onClose={onClose} />
       </div>
       <div className="md:hidden fixed inset-0 flex items-end justify-center bg-black/50 z-50" onClick={onClose}>
-        <MobileDrawer items={items} />
+        <MobileDrawer items={items} onClose={onClose} />
       </div>
     </>
   );
