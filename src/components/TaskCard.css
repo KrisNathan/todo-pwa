@@ -108,36 +108,3 @@
 .task-card-menu-container {
   position: relative;
 }
-
-.dropdown-menu {
-  position: absolute;
-  top: 100%;
-  right: 0;
-  background-color: var(--background);
-  border: 1px solid var(--background-secondary);
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  z-index: 1000;
-  min-width: 120px;
-  overflow: hidden;
-}
-
-.dropdown-item {
-  padding: 12px 16px;
-  cursor: pointer;
-  font-size: 14px;
-  color: var(--text-primary);
-  transition: background-color 0.2s ease;
-}
-
-.dropdown-item:hover {
-  background-color: var(--background-secondary);
-}
-
-.dropdown-item:last-child {
-  color: #ff4444;
-}
-
-.dropdown-item:last-child:hover {
-  background-color: rgba(255, 68, 68, 0.1);
-}

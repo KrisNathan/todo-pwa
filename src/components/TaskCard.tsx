@@ -1,6 +1,7 @@
 import './TaskCard.css'
 import { useState, useEffect, useRef } from 'react'
-import { MdCheckBox, MdCheckBoxOutlineBlank, MdStar, MdStarOutline } from 'react-icons/md'
+import { MdCheckBox, MdCheckBoxOutlineBlank, MdDelete, MdEdit, MdStar, MdStarOutline } from 'react-icons/md'
+import ContextMenu from './ContextMenu';
 
 export interface TaskCardProps {
   title: string;
@@ -41,32 +42,52 @@ export default function TaskCard({
     };
   }, [isDropdownOpen]);
 
+
+  const mousePosition = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
+  const [isContextMenuOpen, setIsContextMenuOpen] = useState(false);
   const handleMenuClick = () => {
-    setIsDropdownOpen(!isDropdownOpen);
+    // setIsDropdownOpen(!isDropdownOpen);
+    // setMousePosition({ x: window.event?.clientX || 0, y: window.event?.clientY || 0 });
+    setIsContextMenuOpen(!isContextMenuOpen);
   };
 
-  const handleEdit = () => {
-    setIsDropdownOpen(false);
-    onEdit?.();
-  };
-
-  const handleDelete = () => {
-    setIsDropdownOpen(false);
-    // Add delete functionality here if needed
+  const onMouseMove = (e: React.MouseEvent) => {
+    mousePosition.current = { x: e.clientX, y: e.clientY };
   };
 
   return (
-    <div className='task-card'>
-      <div className='task-card-checkbox'>
-        <span onClick={onToggleDone} className='cursor-pointer'>
-          <MdCheckBox size={24} color='var(--text-primary)' className={`${isDone ? 'scale-100' : 'scale-0 rotate-180 h-0'} transition-all`} />
-          <MdCheckBoxOutlineBlank size={24} color='var(--text-primary)' className={`${isDone ? 'scale-0 rotate-180 h-0' : 'scale-100'} transition-all`} />
-        </span>
-      </div>
-      <div className='task-card-content'>
-        <div className='standard-bold'>{title}</div>
-        <div className='standard-sub'>{dueDate}</div>
-      </div>
+    <div className='task-card' onMouseMove={onMouseMove}>
+      <ContextMenu
+        position={mousePosition.current}
+        isOpen={isContextMenuOpen}
+        onClose={() => {
+          setIsContextMenuOpen(false);
+        }}
+        items={[
+          { label: 'Edit', onClick: onEdit || (() => { }), icon: <MdEdit size={20} /> },
+          { label: 'Delete', onClick: () => console.log('Delete Task'), icon: <MdDelete size={20} /> },
+        ]}
+      />
+      <button
+        onClick={onToggleDone}
+        onContextMenu={(e) => {
+          e.preventDefault();
+          handleMenuClick();
+        }}
+        className='text-left flex flex-row flex-1 p-0 m-0 cursor-pointer'
+      >
+        <div className='task-card-checkbox'>
+          <span className='cursor-pointer'>
+            <MdCheckBox size={24} color='var(--text-primary)' className={`${isDone ? 'scale-100' : 'scale-0 rotate-180 h-0'} transition-all`} />
+            <MdCheckBoxOutlineBlank size={24} color='var(--text-primary)' className={`${isDone ? 'scale-0 rotate-180 h-0' : 'scale-100'} transition-all`} />
+          </span>
+        </div>
+        <div className='task-card-content'>
+          <div className='standard-bold'>{title}</div>
+          <div className='standard-sub'>{dueDate}</div>
+        </div>
+      </button>
+
       <div className='task-card-actions'>
         <span onClick={onToggleImportant} className='cursor-pointer'>
           {isImportant ?
@@ -76,20 +97,6 @@ export default function TaskCard({
           }
         </span>
 
-        <div className='task-card-menu-container' ref={dropdownRef}>
-          <div className='task-card-menu' onClick={handleMenuClick}>
-          </div>
-          {isDropdownOpen && (
-            <div className='dropdown-menu'>
-              <div className='dropdown-item' onClick={handleEdit}>
-                Edit
-              </div>
-              <div className='dropdown-item' onClick={handleDelete}>
-                Delete
-              </div>
-            </div>
-          )}
-        </div>
       </div>
     </div>
   )

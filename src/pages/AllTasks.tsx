@@ -4,7 +4,6 @@ import TaskCard from "../components/TaskCard";
 import { useState } from "react";
 
 export default function AllTasks() {
-
   const [isTaskImportant, setIsTaskImportant] = useState(false);
   const [isTaskDone, setIsTaskDone] = useState(false);
   return (
