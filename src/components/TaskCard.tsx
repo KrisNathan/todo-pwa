@@ -59,7 +59,8 @@ export default function TaskCard({
     <div className='task-card'>
       <div className='task-card-checkbox'>
         <span onClick={onToggleDone} className='cursor-pointer'>
-          {isDone ? <MdCheckBox size={24} color='var(--text-primary)' /> : <MdCheckBoxOutlineBlank size={24} color='var(--text-primary)' />}
+          <MdCheckBox size={24} color='var(--text-primary)' className={`${isDone ? 'scale-100' : 'scale-0 rotate-180 h-0'} transition-all`} />
+          <MdCheckBoxOutlineBlank size={24} color='var(--text-primary)' className={`${isDone ? 'scale-0 rotate-180 h-0' : 'scale-100'} transition-all`} />
         </span>
       </div>
       <div className='task-card-content'>
