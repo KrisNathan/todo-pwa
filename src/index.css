@@ -13,18 +13,23 @@
   -moz-osx-font-smoothing: grayscale;
 
   --background: white;
+  --background-primary: #007dd5;
+  --background-primary-hover: hsl(205, 100%, 33%);
   --background-secondary: #eef8ff;
   --background-secondary-hover: #daefff;
   --text-primary: #008df0;
   --text-secondary: #707d87;
   --text-default: #000000;
 }
+
 @media (prefers-color-scheme: dark) {
   :root {
     color: rgba(255, 255, 255, 0.87);
     background-color: #242424;
 
     --background: #121212;
+    --background-primary: #007dd5;
+    --background-primary-hover: hsl(205, 100%, 33%);
     --background-secondary: #1e1e1e;
     --background-secondary-hover: #2a2a2a;
     --text-primary: #64b5f6;
@@ -35,6 +40,8 @@
 
 @theme inline {
   --color-bg: var(--background);
+  --color-bg-primary: var(--background-primary);
+  --color-bg-primary-hover: var(--background-primary-hover);
   --color-bg-secondary: var(--background-secondary);
   --color-bg-secondary-hover: var(--background-secondary-hover);
   --color-text-primary: var(--text-primary);
@@ -47,7 +54,8 @@
   box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
   height: 100%;
