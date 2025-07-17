@@ -13,8 +13,8 @@ export default function Sidebar() {
 
       {/* Navigation */}
       <div className="sidebar-nav">
-        <NavItem to='/' title="All Tasks" icon={<MdTaskAlt size={24} />} />
-        <NavItem to='/important' title="Important" icon={<MdStar size={24} />} />
+        <NavItem to='/tasks/all' title="All Tasks" icon={<MdTaskAlt size={24} />} />
+        <NavItem to='/tasks/important' title="Important" icon={<MdStar size={24} />} />
       </div>
 
       {/* Lists Section */}
@@ -23,7 +23,7 @@ export default function Sidebar() {
         <IconBtn onClick={() => {}} label='New List' icon={<MdAdd size={24} />} />
         
         <div className="list-items">
-          <NavItem to='/' title="Moai" icon="📝" />
+          <NavItem to='/tasks/lists/Moai' title="Moai" icon="📝" />
         </div>
       </div>
     </div>
