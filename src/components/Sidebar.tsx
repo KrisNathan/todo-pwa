@@ -14,7 +14,7 @@ export default function Sidebar() {
   const [nameError, setNameError] = useState('');
 
   const defaultEmojis = [
-    '📝', '📋', '✅', '📌', '🎯', '💼', '🏠', '🛒', 
+    '📝', '📋', '✅', '📌', '🎯', '💼', '🏠', '🛒',
     '🎵', '📚', '💡', '🎨', '🏃‍♂️', '🍕', '✈️', '🎮',
     '💻', '📱', '🎬', '🧘‍♀️', '🌟', '🔥', '💎', '🌈'
   ];
@@ -25,7 +25,7 @@ export default function Sidebar() {
     // Check if list name already exists (case-insensitive)
     const normalizedName = listName.trim().toLowerCase();
     const nameExists = lists.some(list => list.title.toLowerCase() === normalizedName);
-    
+
     if (nameExists) {
       setNameError('A list with this name already exists');
       return;
@@ -40,7 +40,7 @@ export default function Sidebar() {
 
     // Add to store
     addList(newList);
-    
+
     // Reset form and close modal
     setListName('');
     setSelectedEmoji('📝');
@@ -58,12 +58,12 @@ export default function Sidebar() {
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newName = e.target.value;
     setListName(newName);
-    
+
     // Clear error when user starts typing
     if (nameError) {
       setNameError('');
     }
-    
+
     // Real-time validation for duplicate names
     if (newName.trim()) {
       const normalizedName = newName.trim().toLowerCase();
@@ -91,19 +91,19 @@ export default function Sidebar() {
       {/* Lists Section */}
       <div className="sidebar-section">
         <h3 className="subtitle select-none">Lists</h3>
-        <IconBtn 
-          onClick={() => setIsCreateListModalOpen(true)} 
-          label='New List' 
-          icon={<MdAdd size={24} />} 
+        <IconBtn
+          onClick={() => setIsCreateListModalOpen(true)}
+          label='New List'
+          icon={<MdAdd size={24} />}
         />
-        
+
         <div className="list-items">
           {lists.map((list) => (
-            <NavItem 
+            <NavItem
               key={list.id}
-              to={`/tasks/lists/${list.id}`} 
-              title={list.title} 
-              icon={list.icon} 
+              to={`/tasks/lists/${list.id}`}
+              title={list.title}
+              icon={list.icon}
             />
           ))}
         </div>
@@ -128,7 +128,7 @@ export default function Sidebar() {
                 </div>
                 <span className="text-sm text-text-secondary">Selected icon</span>
               </div>
-              <div className="grid grid-cols-8 gap-2 p-3 bg-bg-secondary rounded-lg border border-border max-h-32 overflow-y-auto">
+              <div className="flex flex-wrap gap-1 p-3 bg-bg-secondary rounded-lg border border-border max-h-32 overflow-y-auto overflow-x">
                 {defaultEmojis.map((emoji, index) => (
                   <button
                     key={index}
@@ -142,7 +142,7 @@ export default function Sidebar() {
               </div>
             </div>
           </div>
-          
+
           <div>
             <label className="block text-sm font-medium text-text-secondary mb-2">
               List Name *
@@ -154,10 +154,10 @@ export default function Sidebar() {
               className={`w-full px-3 py-2 bg-bg-primary border rounded-lg 
                          focus:outline-none focus:ring-2 focus:border-transparent
                          text-text-primary placeholder-text-secondary
-                         ${nameError 
-                           ? 'border-red-500 focus:ring-red-500' 
-                           : 'border-border focus:ring-blue-500'
-                         }`}
+                         ${nameError
+                  ? 'border-red-500 focus:ring-red-500'
+                  : 'border-border focus:ring-blue-500'
+                }`}
               placeholder="Enter list name..."
               autoFocus
             />
@@ -168,7 +168,7 @@ export default function Sidebar() {
               </p>
             )}
           </div>
-          
+
           <div className="flex justify-end space-x-3 pt-4">
             <button
               onClick={handleModalClose}
