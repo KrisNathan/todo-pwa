@@ -19,6 +19,48 @@
   }
 }
 
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes zoom-in-95 {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes slide-up {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slide-down {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
 .enter-bounce {
   animation: bounce 0.3s ease-in-out;
 }
@@ -26,4 +68,8 @@
 :root { 
   --anim-bounce: bounce 0.3s ease-in-out;
   --anim-click: click 0.1s ease-in-out;
+  --anim-fade-in: fade-in 0.2s ease-out;
+  --anim-zoom-in-95: zoom-in-95 0.2s ease-out;
+  --anim-slide-up: slide-up 0.3s ease-out;
+  --anim-slide-down: slide-down 0.3s ease-out;
 }

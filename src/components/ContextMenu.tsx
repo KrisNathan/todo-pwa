@@ -104,7 +104,7 @@ const DesktopMenu = ({ items, position, onClose }: { items: MenuItem[]; position
 
 const MobileDrawer = ({ items, onClose }: { items: MenuItem[], onClose: () => void }) => (
   <div
-    className="bg-bg-secondary p-4 shadow-lg rounded-t-2xl w-full max-w-md mb-0"
+    className="bg-bg-secondary p-4 shadow-lg rounded-t-2xl w-full max-w-md mb-0 animate-(--anim-slide-up)"
     onClick={(e) => e.stopPropagation()}
   >
     <ul className="space-y-2">
@@ -141,7 +141,7 @@ export default function ContextMenu({ isOpen, onClose, position, items }: Contex
       <div className="hidden md:block fixed inset-0 z-50" onClick={onClose}>
         <DesktopMenu items={items} position={position} onClose={onClose} />
       </div>
-      <div className="md:hidden fixed inset-0 flex items-end justify-center bg-black/50 z-50" onClick={onClose}>
+      <div className="md:hidden fixed inset-0 flex items-end justify-center bg-black/50 backdrop-blur-sm z-50" onClick={onClose}>
         <MobileDrawer items={items} onClose={onClose} />
       </div>
     </>
