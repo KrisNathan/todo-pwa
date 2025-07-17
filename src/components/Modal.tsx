@@ -85,7 +85,7 @@ export default function Modal({
       <div
         ref={modalRef}
         className={`
-          relative bg-bg-secondary rounded-2xl shadow-2xl 
+          relative bg-bg rounded-2xl shadow-2xl 
           w-full ${sizeClasses[size]} 
           max-h-[90vh] overflow-hidden
           transform transition-all duration-200 ease-out
@@ -96,7 +96,7 @@ export default function Modal({
       >
         {/* Header */}
         {(title || showCloseButton) && (
-          <div className="flex items-center justify-between p-6 border-b border-border">
+          <div className="flex items-center justify-between p-6 bg-bg-secondary">
             {title && (
               <h2 id="modal-title" className="text-xl font-semibold text-text-primary">
                 {title}
@@ -122,22 +122,3 @@ export default function Modal({
     </div>
   );
 }
-
-// Optional: Modal.Header, Modal.Body, Modal.Footer components for more structured usage
-export const ModalHeader = ({ children, className = '' }: { children: React.ReactNode; className?: string }) => (
-  <div className={`px-6 py-4 border-b border-border ${className}`}>
-    {children}
-  </div>
-);
-
-export const ModalBody = ({ children, className = '' }: { children: React.ReactNode; className?: string }) => (
-  <div className={`px-6 py-4 ${className}`}>
-    {children}
-  </div>
-);
-
-export const ModalFooter = ({ children, className = '' }: { children: React.ReactNode; className?: string }) => (
-  <div className={`px-6 py-4 border-t border-border flex justify-end gap-3 ${className}`}>
-    {children}
-  </div>
-);

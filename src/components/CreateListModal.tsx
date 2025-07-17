@@ -10,11 +10,11 @@ interface CreateListModalProps {
   existingLists: List[];
 }
 
-export default function CreateListModal({ 
-  isOpen, 
-  onClose, 
-  onCreateList, 
-  existingLists 
+export default function CreateListModal({
+  isOpen,
+  onClose,
+  onCreateList,
+  existingLists
 }: CreateListModalProps) {
   const [listName, setListName] = useState('');
   const [selectedEmoji, setSelectedEmoji] = useState('📝');
@@ -32,7 +32,7 @@ export default function CreateListModal({
     // Check if list name already exists (case-insensitive)
     const normalizedName = listName.trim().toLowerCase();
     const nameExists = existingLists.some(list => list.title.toLowerCase() === normalizedName);
-    
+
     if (nameExists) {
       setNameError('A list with this name already exists');
       return;
@@ -45,7 +45,7 @@ export default function CreateListModal({
     };
 
     onCreateList(newList);
-    
+
     // Reset form and close modal
     resetForm();
   };
@@ -64,12 +64,12 @@ export default function CreateListModal({
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newName = e.target.value;
     setListName(newName);
-    
+
     // Clear error when user starts typing
     if (nameError) {
       setNameError('');
     }
-    
+
     // Real-time validation for duplicate names
     if (newName.trim()) {
       const normalizedName = newName.trim().toLowerCase();
@@ -98,18 +98,18 @@ export default function CreateListModal({
           </label>
           <div className="space-y-3">
             <div className="flex items-center gap-3">
-              <div className="text-2xl bg-bg-secondary-hover rounded-lg p-2 border border-border">
+              <div className="text-2xl bg-bg-secondary-hover rounded-lg p-2">
                 {selectedEmoji}
               </div>
               <span className="text-sm text-text-secondary">Selected icon</span>
             </div>
-            <div className="flex flex-wrap gap-1  justify-center p-3 bg-bg-secondary rounded-lg border border-border max-h-32 overflow-y-auto">
+            <div className="flex flex-wrap gap-1  justify-center p-3 bg-bg-secondary rounded-lg max-h-32 overflow-y-auto">
               {defaultEmojis.map((emoji, index) => (
                 <button
                   key={index}
                   onClick={() => setSelectedEmoji(emoji)}
                   className={`text-xl p-2 rounded-lg transition-colors duration-200 hover:bg-bg-secondary-hover
-                            ${selectedEmoji === emoji ? 'bg-blue-500/20 border border-blue-500' : 'border border-transparent'}`}
+                            ${selectedEmoji === emoji ? 'bg-blue-500/20 border border-text-primary' : 'border border-transparent'}`}
                 >
                   {emoji}
                 </button>
@@ -117,7 +117,7 @@ export default function CreateListModal({
             </div>
           </div>
         </div>
-        
+
         {/* List Name Input */}
         <div>
           <label className="block text-sm font-medium text-text-secondary mb-2">
@@ -127,13 +127,7 @@ export default function CreateListModal({
             type="text"
             value={listName}
             onChange={handleNameChange}
-            className={`w-full px-3 py-2 bg-bg-primary border rounded-lg 
-                       focus:outline-none focus:ring-2 focus:border-transparent
-                       text-text-primary placeholder-text-secondary
-                       ${nameError 
-                         ? 'border-red-500 focus:ring-red-500' 
-                         : 'border-border focus:ring-blue-500'
-                       }`}
+            className={`w-full px-3 py-2 bg-bg-secondary border-none  rounded-lg  placeholder-text-secondary text-text-default`}
             placeholder="Enter list name..."
             autoFocus
           />
@@ -144,7 +138,7 @@ export default function CreateListModal({
             </p>
           )}
         </div>
-        
+
         {/* Action Buttons */}
         <div className="flex justify-end space-x-3 pt-4">
           <button
@@ -158,7 +152,7 @@ export default function CreateListModal({
           <button
             onClick={handleCreateList}
             disabled={!listName.trim() || !!nameError}
-            className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 
+            className="px-4 py-2 bg-bg-primary text-white rounded-lg hover:bg-bg-primary-hover cursor-pointer 
                        transition-colors duration-200 flex items-center gap-2
                        disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-blue-500"
           >
