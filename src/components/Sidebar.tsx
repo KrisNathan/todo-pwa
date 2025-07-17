@@ -2,13 +2,16 @@ import { useState } from 'react'
 import IconBtn from './IconBtn'
 import NavItem from './NavItem'
 import Modal from './Modal'
+import useTodoStore from '../stores/todoStore'
 import './Sidebar.css'
 import { MdAdd, MdStar, MdTaskAlt, MdSave, MdCancel } from 'react-icons/md'
 
 export default function Sidebar() {
+  const { lists, addList } = useTodoStore();
   const [isCreateListModalOpen, setIsCreateListModalOpen] = useState(false);
   const [listName, setListName] = useState('');
   const [selectedEmoji, setSelectedEmoji] = useState('📝');
+  const [nameError, setNameError] = useState('');
 
   const defaultEmojis = [
     '📝', '📋', '✅', '📌', '🎯', '💼', '🏠', '🛒', 
@@ -17,22 +20,59 @@ export default function Sidebar() {
   ];
 
   const handleCreateList = () => {
-    // TODO: Implement list creation logic
-    console.log('Creating list:', { 
-      name: listName, 
-      icon: selectedEmoji 
-    });
+    if (!listName.trim()) return;
+
+    // Check if list name already exists (case-insensitive)
+    const normalizedName = listName.trim().toLowerCase();
+    const nameExists = lists.some(list => list.title.toLowerCase() === normalizedName);
+    
+    if (nameExists) {
+      setNameError('A list with this name already exists');
+      return;
+    }
+
+    // Create new list with unique ID
+    const newList = {
+      id: crypto.randomUUID(),
+      title: listName.trim(),
+      icon: selectedEmoji
+    };
+
+    // Add to store
+    addList(newList);
     
     // Reset form and close modal
     setListName('');
     setSelectedEmoji('📝');
+    setNameError('');
     setIsCreateListModalOpen(false);
   };
 
   const handleModalClose = () => {
     setListName('');
     setSelectedEmoji('📝');
+    setNameError('');
     setIsCreateListModalOpen(false);
+  };
+
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newName = e.target.value;
+    setListName(newName);
+    
+    // Clear error when user starts typing
+    if (nameError) {
+      setNameError('');
+    }
+    
+    // Real-time validation for duplicate names
+    if (newName.trim()) {
+      const normalizedName = newName.trim().toLowerCase();
+      const nameExists = lists.some(list => list.title.toLowerCase() === normalizedName);
+      if (nameExists) {
+        setNameError('A list with this name already exists');
+        navigator.vibrate(50);
+      }
+    }
   };
 
   return (
@@ -58,7 +98,14 @@ export default function Sidebar() {
         />
         
         <div className="list-items">
-          <NavItem to='/tasks/lists/Moai' title="Moai" icon="📝" />
+          {lists.map((list) => (
+            <NavItem 
+              key={list.id}
+              to={`/tasks/lists/${list.id}`} 
+              title={list.title} 
+              icon={list.icon} 
+            />
+          ))}
         </div>
       </div>
 
@@ -103,13 +150,23 @@ export default function Sidebar() {
             <input
               type="text"
               value={listName}
-              onChange={(e) => setListName(e.target.value)}
-              className="w-full px-3 py-2 bg-bg-primary border border-border rounded-lg 
-                         focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
-                         text-text-primary placeholder-text-secondary"
+              onChange={handleNameChange}
+              className={`w-full px-3 py-2 bg-bg-primary border rounded-lg 
+                         focus:outline-none focus:ring-2 focus:border-transparent
+                         text-text-primary placeholder-text-secondary
+                         ${nameError 
+                           ? 'border-red-500 focus:ring-red-500' 
+                           : 'border-border focus:ring-blue-500'
+                         }`}
               placeholder="Enter list name..."
               autoFocus
             />
+            {nameError && (
+              <p className="mt-1 text-sm text-red-500 flex items-center gap-1">
+                <span>⚠️</span>
+                {nameError}
+              </p>
+            )}
           </div>
           
           <div className="flex justify-end space-x-3 pt-4">
@@ -123,7 +180,7 @@ export default function Sidebar() {
             </button>
             <button
               onClick={handleCreateList}
-              disabled={!listName.trim()}
+              disabled={!listName.trim() || !!nameError}
               className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 
                          transition-colors duration-200 flex items-center gap-2
                          disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-blue-500"
