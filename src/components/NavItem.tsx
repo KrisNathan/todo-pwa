@@ -13,7 +13,7 @@ export default function NavItem({ to, title, icon }: NavItemProps) {
   const isActive = location.pathname === to;
 
   return (
-    <Link to={to} className={`active:animate-(--anim-click) cursor-pointer select-none ${isActive ? "active" : ""} flex flex-row gap-3 py-3 px-4 rounded-2xl hover:bg-bg-secondary-hover transition-colors duration-200`}>
+    <Link to={to} className={`active:animate-(--anim-click) cursor-pointer select-none ${isActive ? "active" : ""} flex flex-row gap-3 py-3 px-4 rounded-2xl hover:bg-bg-secondary-hover transition-colors duration-200 animate-(--anim-slide-up)`}>
       {icon}
       <div>
         {title}
