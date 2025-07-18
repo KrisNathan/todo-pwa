@@ -14,7 +14,7 @@ function App() {
           <Route path='/tasks' element={<Navigate to="/tasks/all" replace />} />
           <Route path='/tasks/all' element={<AllTasks />} />
           <Route path='/tasks/important' element={<ImportantTasks />} />
-          <Route path='/tasks/lists/:listName' element={<List />} />
+          <Route path='/tasks/lists/:listId' element={<List />} />
         </Route>
       </Routes>
     </Router>
