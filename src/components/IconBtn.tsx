@@ -1,5 +1,3 @@
-import './IconBtn.css'
-
 interface IconBtnProps {
   icon: React.ReactNode;
   label: string;
