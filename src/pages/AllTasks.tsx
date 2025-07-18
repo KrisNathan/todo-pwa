@@ -1,37 +1,25 @@
 import "./AllTasks.css"
-import TaskCard from "../components/TaskCard";
-
-import { useState } from "react";
+import TaskCardLogic from "../components/TaskCardLogic";
+import TaskFactory from "../components/TaskFactory";
+import useTodoStore from "../stores/todoStore";
 
 export default function AllTasks() {
-  const [isTaskImportant, setIsTaskImportant] = useState(false);
-  const [isTaskDone, setIsTaskDone] = useState(false);
+  const todoStore = useTodoStore();
+  const tasks = todoStore.tasks;
   return (
-    <div className="all-tasks-container">
+    <div className="flex flex-col gap-8 h-full">
       <div className="all-tasks-header">
         <div className="title select-none">All Tasks</div>
         <div className="subtitle select-none">Hello User!</div>
       </div>
-      <div className="flex flex-col gap-1">
-
-        <TaskCard
-          title="Sample Task"
-          dueDate="2023-10-31"
-          isImportant={isTaskImportant}
-          onToggleImportant={() => setIsTaskImportant(!isTaskImportant)}
-          isDone={isTaskDone}
-          onToggleDone={() => setIsTaskDone(!isTaskDone)}
-          onEdit={() => console.log("Edit Task")}
-        />
-        <TaskCard
-          title="Sample Task"
-          dueDate="2023-10-31"
-          isImportant={isTaskImportant}
-          onToggleImportant={() => setIsTaskImportant(!isTaskImportant)}
-          isDone={isTaskDone}
-          onToggleDone={() => setIsTaskDone(!isTaskDone)}
-          onEdit={() => console.log("Edit Task")}
-        />
+      <TaskFactory />
+      <div className="flex flex-col gap-1 flex-1">
+        {tasks.map((task) => (
+          <TaskCardLogic
+            key={task.id}
+            taskId={task.id}
+          />
+        ))}
       </div>
     </div>
   );

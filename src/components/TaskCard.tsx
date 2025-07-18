@@ -5,7 +5,7 @@ import ContextMenu from './ContextMenu';
 
 export interface TaskCardProps {
   title: string;
-  dueDate: string;
+  dueDate?: string;
   isImportant: boolean;
   isDone?: boolean;
   onDelete?: () => void;
@@ -46,14 +46,24 @@ export default function TaskCard({
   const mousePosition = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
   const [isContextMenuOpen, setIsContextMenuOpen] = useState(false);
   const handleMenuClick = () => {
-    // setIsDropdownOpen(!isDropdownOpen);
-    // setMousePosition({ x: window.event?.clientX || 0, y: window.event?.clientY || 0 });
     setIsContextMenuOpen(!isContextMenuOpen);
   };
 
   const onMouseMove = (e: React.MouseEvent) => {
     mousePosition.current = { x: e.clientX, y: e.clientY };
   };
+
+  const toggleDoneHandler = () => {
+    if (onToggleDone) {
+      onToggleDone();
+    }
+  };
+
+  const toggleImportantHandler = () => {
+    if (onToggleImportant) {
+      onToggleImportant();
+    }
+  }
 
   return (
     <div className='task-card' onMouseMove={onMouseMove}>
@@ -69,12 +79,7 @@ export default function TaskCard({
         ]}
       />
       <button
-        onClick={() => {
-          if (onToggleDone) {
-            onToggleDone();
-          }
-          navigator.vibrate(50);
-        }}
+        onClick={toggleDoneHandler}
         onContextMenu={(e) => {
           e.preventDefault();
           handleMenuClick();
@@ -89,12 +94,12 @@ export default function TaskCard({
         </div>
         <div className='task-card-content'>
           <div className='standard-bold'>{title}</div>
-          <div className='standard-sub'>{dueDate}</div>
+          {dueDate && <div className='standard-sub'>{dueDate}</div>}
         </div>
       </button>
 
       <div className='task-card-actions'>
-        <span onClick={onToggleImportant} className='cursor-pointer'>
+        <span onClick={toggleImportantHandler} className='cursor-pointer'>
           {isImportant ?
             <MdStar size={24} color='#ffa500' />
             :
