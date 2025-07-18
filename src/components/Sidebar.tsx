@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import IconBtn from './IconBtn'
+import IconButton from './IconButton'
 import NavItem from './NavItem'
 import CreateListModal from './CreateListModal'
 import useTodoStore from '../stores/todoStore'
@@ -41,7 +41,7 @@ export default function Sidebar() {
       {/* Lists Section */}
       <div className="sidebar-section">
         <h3 className="subtitle select-none">Lists</h3>
-        <IconBtn
+        <IconButton
           onClick={() => setIsCreateListModalOpen(true)}
           label='New List'
           icon={<MdAdd size={24} />}

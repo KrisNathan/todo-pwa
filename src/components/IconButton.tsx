@@ -1,6 +1,6 @@
 import Button from "./Button";
 
-interface IconBtnProps {
+interface IconButtonProps {
   icon: React.ReactNode;
   label: string;
   className?: string;
@@ -8,7 +8,7 @@ interface IconBtnProps {
   onClick?: () => void;
 }
 
-export default function IconBtn({ icon, label, className = '', disabled = false, onClick }: IconBtnProps) {
+export default function IconButton({ icon, label, className = '', disabled = false, onClick }: IconButtonProps) {
   return (
     <Button onClick={onClick} ariaLabel={label} className={className} disabled={disabled}>
       {icon}
