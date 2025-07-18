@@ -25,9 +25,9 @@
 @media (prefers-color-scheme: dark) {
   :root {
     color: rgba(255, 255, 255, 0.87);
-    background-color: #242424;
+    background-color: var(--background);
 
-    --background: #121212;
+    --background: #242424;
     --background-primary: #007dd5;
     --background-primary-hover: hsl(205, 100%, 33%);
     --background-secondary: #1e1e1e;
