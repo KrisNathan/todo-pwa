@@ -29,9 +29,10 @@ type Actions = {
   addList: (list: List) => void;
   removeList: (listId: string) => void;
   updateList: (listId: string, updates: Partial<List>) => void;
+  getListById: (listId: string) => List | undefined;
 }
 
-const useTodoStore = create<State & Actions>()(immer((set) => ({
+const useTodoStore = create<State & Actions>()(immer((set, get) => ({
   tasks: [],
   lists: [],
 
@@ -65,6 +66,10 @@ const useTodoStore = create<State & Actions>()(immer((set) => ({
       Object.assign(list, updates);
     }
   }),
+  getListById: (listId: string): List | undefined => {
+    const state = get();
+    return state.lists.find((list: List) => list.id === listId);
+  },
 })));
 
 export default useTodoStore;
