@@ -6,7 +6,7 @@ export interface Task {
   title: string;
   completed: boolean;
   dueDate?: Date;
-  isImportant?: boolean;
+  isImportant: boolean;
 
   listId: string;
 }
@@ -23,9 +23,12 @@ type State = {
 }
 
 type Actions = {
-  addTask: (task: Task) => void;
+  addTask: (task: Omit<Task, 'id'>, taskIdOverride?: string) => void;
   removeTask: (taskId: string) => void;
   updateTask: (taskId: string, updates: Partial<Task>) => void;
+  getTaskById: (taskId: string) => Task | undefined;
+  getImportantTasks: () => Task[];
+
   addList: (list: List) => void;
   removeList: (listId: string) => void;
   updateList: (listId: string, updates: Partial<List>) => void;
@@ -36,8 +39,12 @@ const useTodoStore = create<State & Actions>()(immer((set, get) => ({
   tasks: [],
   lists: [],
 
-  addTask: (task) => set((state) => {
-    state.tasks.push(task);
+  addTask: (task, taskIdOverride) => set((state) => {
+    const newTask: Task = {
+      ...task,
+      id: taskIdOverride ? taskIdOverride : crypto.randomUUID(),
+    }
+    state.tasks.push(newTask);
   }),
 
   removeTask: (taskId) => set((state) => {
@@ -50,6 +57,16 @@ const useTodoStore = create<State & Actions>()(immer((set, get) => ({
       Object.assign(task, updates);
     }
   }),
+
+  getTaskById: (taskId: string): Task | undefined => {
+    const state = get();
+    return state.tasks.find((task: Task) => task.id === taskId);
+  },
+
+  getImportantTasks: () => {
+    const state = get();
+    return state.tasks.filter(task => task.isImportant);
+  },
 
   addList: (list) => set((state) => {
     state.lists.push(list);
