@@ -26,7 +26,7 @@ const sizeClasses = {
 };
 
 const variantClasses = {
-  primary: 'bg-blue-500 hover:bg-blue-600 text-white shadow-blue-500/25',
+  primary: 'bg-bg-primary hover:bg-bg-primary-hover text-white shadow-blue-500/25',
   secondary: 'bg-bg-secondary hover:bg-bg-secondary-hover text-text-primary shadow-black/10',
   success: 'bg-green-500 hover:bg-green-600 text-white shadow-green-500/25',
   danger: 'bg-red-500 hover:bg-red-600 text-white shadow-red-500/25'
