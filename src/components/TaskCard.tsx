@@ -92,7 +92,7 @@ export default function TaskCard({
             <MdCheckBoxOutlineBlank size={24} color='var(--text-primary)' className={`${isDone ? 'scale-0 rotate-180 h-0' : 'scale-100'} transition-all`} />
           </span>
         </div>
-        <div className='task-card-content'>
+        <div className={'transition-all task-card-content ' + (isDone ? 'done' : '')}>
           <div className='standard-bold'>{title}</div>
           {dueDate && <div className='standard-sub'>{dueDate}</div>}
         </div>

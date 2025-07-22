@@ -55,6 +55,11 @@
   color: var(--text-default);
 }
 
+.task-card-content.done {
+  color: var(--text-secondary);
+  text-decoration: line-through;
+}
+
 .task-card-content .standard-bold {
   margin: 0;
   word-wrap: break-word;
