@@ -52,10 +52,9 @@ export default function TaskFactory() {
         <DateTimePicker 
           value={dueDate}
           onChange={setDueDate}
-          placeholder="Select due date"
           clearable={true}
           disabled={false}
-          className="w-12 h-12 rounded-full items-center justify-center"
+          className="h-12 rounded-full items-center justify-center"
         />
         <button
           className="w-12 h-12 flex items-center justify-center bg-primary text-white rounded-full bg-bg-primary hover:bg-bg-primary-hover transition-colors  cursor-pointer active:animate-(--anim-click)"
