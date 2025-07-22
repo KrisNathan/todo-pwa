@@ -5,7 +5,7 @@ export default function ImportantTasks() {
   const todoStore = useTodoStore();
   const importantTasks = todoStore.getImportantTasks();
   return (
-    <div>
+    <div className="flex flex-col gap-8 h-full">
       <h1 className="title select-none">Important Tasks</h1>
       <div className="flex flex-col gap-1">
         {importantTasks.map(task => (
