@@ -1,8 +1,11 @@
+import WorkspaceDropdown from "../components/dropdown/WorkspaceDropdown";
+import FullPageMessage from "../components/FullPageMessage";
+
 export default function HomePage() {
   return (
-    <div>
-      <h1>Welcome to the Home Page</h1>
-      <p>This is the main content area.</p>
+    <div className="flex flex-col w-full h-full">
+      <WorkspaceDropdown />
+      <FullPageMessage icon='😴' message="No tasks yet!" />
     </div>
   )
 }
