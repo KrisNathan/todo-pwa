@@ -4,43 +4,58 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  --color-background: #000;
-  --color-text: #ffffff;
-  --color-text-secondary: #939393;
-  --color-secondary: #1E1E1E;
-  --color-secondary-hover: hsl(0, 0%, 20%);
-  --color-primary: #096FFF;
-  --color-primary-hover: hsl(215, 100%, 60%);
-  --color-accent: #539BFF;
-  --color-green: #71FF7D;
-  --color-red: #FF5E5E;
-  --color-yellow: #FFC756;
+  --fun-color-background: #000;
+  --fun-color-text: #ffffff;
+  --fun-color-text-secondary: #939393;
+  --fun-color-secondary: #1E1E1E;
+  --fun-color-secondary-hover: hsl(0, 0%, 20%);
+  --fun-color-primary: #096FFF;
+  --fun-color-primary-hover: hsl(215, 100%, 60%);
+  --fun-color-accent: #539BFF;
+  --fun-color-green: #71FF7D;
+  --fun-color-red: #FF5E5E;
+  --fun-color-yellow: #FFC756;
 
   color-scheme: dark;
-  color: var(--color-text);
-  background-color: var(--color-background);
+  color: var(--fun-color-text);
+  background-color: var(--fun-color-background);
 
   font-family: 'Poppins';
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --color-background: #000;
-    --color-text: #ffffff;
-    --color-text-secondary: #939393;
-    --color-secondary: #1E1E1E;
-    --color-secondary-hover: hsl(0, 0%, 20%);
-    --color-primary: #096FFF;
-    --color-primary-hover: hsl(215, 100%, 60%);
-    --color-accent: #539BFF;
-    --color-green: #71FF7D;
-    --color-red: #FF5E5E;
-    --color-yellow: #FFC756;
+    --fun-color-background: #000;
+    --fun-color-text: #ffffff;
+    --fun-color-text-secondary: #939393;
+    --fun-color-secondary: #1E1E1E;
+    --fun-color-secondary-hover: hsl(0, 0%, 20%);
+    --fun-color-primary: #096FFF;
+    --fun-color-primary-hover: hsl(215, 100%, 60%);
+    --fun-color-accent: #539BFF;
+    --fun-color-green: #71FF7D;
+    --fun-color-red: #FF5E5E;
+    --fun-color-yellow: #FFC756;
 
-    color: var(--color-text);
-    background-color: var(--color-background);
+    color: var(--fun-color-text);
+    background-color: var(--fun-color-background);
 
   }
+}
+
+/* tailwind colors */
+@theme {
+  --color-background: var(--fun-color-background);
+  --color-text: var(--fun-color-text);
+  --color-text-secondary: var(--fun-color-text-secondary);
+  --color-secondary: var(--fun-color-secondary);
+  --color-secondary-hover: var(--fun-color-secondary-hover);
+  --color-primary: var(--fun-color-primary);
+  --color-primary-hover: var(--fun-color-primary-hover);
+  --color-accent: var(--fun-color-accent);
+  --color-green: var(--fun-color-green);
+  --color-red: var(--fun-color-red);
+  --color-yellow: var(--fun-color-yellow);
 }
 
 /* Global reset and base styles */
@@ -58,6 +73,26 @@ body {
 
 #root {
   height: 100%;
+}
+
+.typography-regular {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.typography-large {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.typography-medium {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.typography-small {
+  font-size: 0.75rem;
+  font-weight: 700;
 }
 
 @import "tailwindcss";
