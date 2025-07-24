@@ -15,7 +15,7 @@ function NavLink({ to, activeIcon, inactiveIcon }: NavLinkProps) {
   return (
     <Link 
       to={to} 
-      className="flex flex-1 items-center justify-center rounded-lg py-2 transition-all"
+      className="flex flex-1 items-center justify-center rounded-lg py-2 transition-all active:animate-(--anim-click)"
     >
       {isActive ? activeIcon : inactiveIcon}
     </Link>
