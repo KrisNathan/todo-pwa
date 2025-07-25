@@ -13,7 +13,7 @@ interface DropdownProps {
   isOpen?: boolean;
   onOpen?: () => void;
   onClose?: () => void;
-  onSelect?: (value: string | number) => void;
+  onSelect?: (value: string | number) => void; // do not setIsOpen(false) here, let onClose handle it
 }
 
 export default function Dropdown({ selectedValue, options, isOpen, onOpen, onClose, onSelect }: DropdownProps) {
@@ -27,43 +27,66 @@ export default function Dropdown({ selectedValue, options, isOpen, onOpen, onClo
 
 
   const dropdownDivRef = useRef<HTMLDivElement>(null);
-  const onCloseHandler = () => {
+
+  const onCloseHandler = async () => {
     if (!isOpen) return;
     dropdownDivRef.current?.classList.add("animate-(--anim-exit-slide-up)");
-    setTimeout(() => {
-      if (dropdownDivRef.current) {
-        dropdownDivRef.current.classList.remove("animate-(--anim-exit-slide-up)");
-      }
-      onClose?.();
-    }, 300); // Match the duration of the slide-up animation
+    await new Promise(resolve => setTimeout(resolve, 300)); // Match the duration of the slide-up animation
+    if (dropdownDivRef.current) {
+      dropdownDivRef.current.classList.remove("animate-(--anim-exit-slide-up)");
+    }
+    onClose?.();
+  }
+
+
+  const buttonOnClickHandler = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
+    if (isOpen) {
+      onCloseHandler();
+    } else {
+      onOpen?.();
+    }
   };
 
-  return <Button
-    className="relative"
-    onClick={isOpen ? onCloseHandler : onOpen}
-  >
-    <div className="flex flex-row">
-      <div className="flex-1">{selectedValue ? findOptionByValue(selectedValue).label : options[0].label}</div>
-      <MdArrowDropDown size={24} />
-    </div>
+  const outsideClickHandler = (event: React.MouseEvent<HTMLDivElement>) => {
+    event.stopPropagation();
+    onCloseHandler();
+  };
 
-    {isOpen && (
-      <>
-        <div ref={dropdownDivRef} className="absolute top-12 left-0 bg-secondary rounded-xl w-full flex flex-col p-2 gap-1 animate-(--anim-enter-slide-down)">
+  const onSelectHandler = async (value: string | number) => {
+    await onCloseHandler();
+    onSelect?.(value);
+  };
+
+
+  return <>
+    <Button
+      className="relative"
+      onClick={buttonOnClickHandler}
+    >
+      <div className="flex flex-row">
+        <div className="flex-1">{selectedValue ? findOptionByValue(selectedValue).label : options[0].label}</div>
+        <MdArrowDropDown size={24} />
+      </div>
+
+      {isOpen && (
+        <div ref={dropdownDivRef} className="absolute top-12 left-0 bg-secondary rounded-xl w-full flex flex-col p-2 gap-1 animate-(--anim-enter-slide-down) z-50">
           {unselectedOptions.map((option) => (
             <Button
               variant="secondary"
               key={option.value}
               className="p-2 hover:bg-secondary cursor-pointer"
-              onClick={() => onSelect?.(option.value)}
+              onClick={() => onSelectHandler(option.value)}
             >
               {option.label}
             </Button>
           ))}
         </div>
-        <div className="inset-0" onClick={onClose}></div>
-      </>
+      )}
+    </Button>
+    
+    {isOpen && (
+      <div className="fixed inset-0 z-40 cursor-default" onClick={outsideClickHandler}></div>
     )}
-
-  </Button>
+  </>
 }

@@ -15,7 +15,6 @@ export default function WorkspaceDropdown() {
   const onSelect = (value: string | number) => {
     console.log("Selected workspace:", value);
     setValue(value as string);
-    setIsOpen(false);
   };
 
   return (
