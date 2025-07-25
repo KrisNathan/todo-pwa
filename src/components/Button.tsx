@@ -1,3 +1,5 @@
+import { useBatterySaver } from '../hooks/useBatterySaver';
+
 type Variant = "primary" | "secondary";
 interface ButtonProps {
   children?: React.ReactNode;
@@ -5,7 +7,6 @@ interface ButtonProps {
   className?: string;
   variant?: Variant;
 }
-
 
 const getVariantClass = (variant: Variant) => {
   switch (variant) {
@@ -19,9 +20,16 @@ const getVariantClass = (variant: Variant) => {
 };
 
 export default function Button({ children, onClick, className, variant = "primary" }: ButtonProps) {
+  const { isBatterySaverMode } = useBatterySaver();
+
   const onClickHandler = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
-    navigator.vibrate(50);
+    
+    // Only vibrate if not in battery saver mode and vibration is supported
+    if (!isBatterySaverMode && 'vibrate' in navigator) {
+      navigator.vibrate(50);
+    }
+    
     onClick?.(event);
   };
   return (
