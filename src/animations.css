@@ -39,7 +39,7 @@
   }
 }
 
-@keyframes slide-up {
+@keyframes enter-slide-up {
   from {
     transform: translateY(100%);
     opacity: 0;
@@ -50,7 +50,7 @@
   }
 }
 
-@keyframes slide-down {
+@keyframes enter-slide-down {
   from {
     transform: translateY(-100%);
     opacity: 0;
@@ -58,6 +58,18 @@
   to {
     transform: translateY(0);
     opacity: 1;
+  }
+}
+
+
+@keyframes exit-slide-up {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(-100%);
+    opacity: 0;
   }
 }
 
@@ -70,6 +82,7 @@
   --anim-click: click 0.1s ease-in-out;
   --anim-fade-in: fade-in 0.2s ease-out;
   --anim-zoom-in-95: zoom-in-95 0.2s ease-out;
-  --anim-slide-up: slide-up 0.3s ease-out;
-  --anim-slide-down: slide-down 0.3s ease-out;
+  --anim-enter-slide-up: enter-slide-up 0.3s ease-out;
+  --anim-enter-slide-down: enter-slide-down 0.3s ease-out;
+  --anim-exit-slide-up: exit-slide-up 0.3s ease-in-out;
 }

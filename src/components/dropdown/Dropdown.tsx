@@ -1,6 +1,6 @@
 import { MdArrowDropDown } from "react-icons/md";
 import Button from "../Button";
-import { useMemo } from "react";
+import { useMemo, useRef } from "react";
 
 export interface DropdownOption {
   label: string;
@@ -25,9 +25,22 @@ export default function Dropdown({ selectedValue, options, isOpen, onOpen, onClo
     return options.filter(option => option.value !== selectedValue);
   }, [selectedValue, options]);
 
+
+  const dropdownDivRef = useRef<HTMLDivElement>(null);
+  const onCloseHandler = () => {
+    if (!isOpen) return;
+    dropdownDivRef.current?.classList.add("animate-(--anim-exit-slide-up)");
+    setTimeout(() => {
+      if (dropdownDivRef.current) {
+        dropdownDivRef.current.classList.remove("animate-(--anim-exit-slide-up)");
+      }
+      onClose?.();
+    }, 300); // Match the duration of the slide-up animation
+  };
+
   return <Button
     className="relative"
-    onClick={isOpen ? onClose : onOpen}
+    onClick={isOpen ? onCloseHandler : onOpen}
   >
     <div className="flex flex-row">
       <div className="flex-1">{selectedValue ? findOptionByValue(selectedValue).label : options[0].label}</div>
@@ -36,7 +49,7 @@ export default function Dropdown({ selectedValue, options, isOpen, onOpen, onClo
 
     {isOpen && (
       <>
-        <div className="absolute top-12 left-0 bg-secondary rounded-xl w-full flex flex-col p-2 gap-1">
+        <div ref={dropdownDivRef} className="absolute top-12 left-0 bg-secondary rounded-xl w-full flex flex-col p-2 gap-1 animate-(--anim-enter-slide-down)">
           {unselectedOptions.map((option) => (
             <Button
               variant="secondary"
