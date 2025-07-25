@@ -112,13 +112,13 @@ export default function SettingsPage() {
       <div className="flex flex-col gap-2">
         <div className="typography-regular">Sync Code</div>
         <div className="typography-small text-text-secondary">DO NOT SHARE. Treat this code like a password. If someone gets ahold of it, they can read and modify your synced data.</div>
-        <CodeBox value={syncCode} onChange={setSyncCode} />
+        <CodeBox value={syncCode} onChange={setSyncCode} isHidden isCopyable isRandomizable />
       </div>
 
       <div className="flex flex-col gap-2">
         <div className="typography-regular">Device Name</div>
         <div className="typography-small text-text-secondary">Make sure this is unique among your devices.</div>
-        <CodeBox value={deviceName} onChange={setDeviceName} />
+        <CodeBox value={deviceName} onChange={setDeviceName} isEditable />
       </div>
 
       <h1 className="typography-large">Theme</h1>
