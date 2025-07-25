@@ -14,9 +14,10 @@ interface DropdownProps {
   onOpen?: () => void;
   onClose?: () => void;
   onSelect?: (value: string | number) => void; // do not setIsOpen(false) here, let onClose handle it
+  className?: string;
 }
 
-export default function Dropdown({ selectedValue, options, isOpen, onOpen, onClose, onSelect }: DropdownProps) {
+export default function Dropdown({ selectedValue, options, isOpen, onOpen, onClose, onSelect, className }: DropdownProps) {
   const findOptionByValue = (value: string | number) => {
     return options.find(option => option.value === value) || options[0];
   };
@@ -59,16 +60,17 @@ export default function Dropdown({ selectedValue, options, isOpen, onOpen, onClo
   };
 
 
-  return <div className="relative">
+  return <div className={`relative ${className}`}>
     <Button
       onClick={buttonOnClickHandler}
+      className="w-full"
     >
       <div className="flex flex-row">
         <div className="flex-1">{selectedValue ? findOptionByValue(selectedValue).label : options[0].label}</div>
         <MdArrowDropDown size={24} />
       </div>
-
     </Button>
+    
     {isOpen && (
       <div ref={dropdownDivRef} className="absolute top-12 left-0 bg-secondary rounded-xl w-full flex flex-col p-2 gap-1 animate-(--anim-enter-slide-down) z-50">
         {unselectedOptions.map((option) => (

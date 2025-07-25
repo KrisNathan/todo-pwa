@@ -29,6 +29,7 @@ export default function WorkspaceDropdown() {
       onOpen={openDropdown}
       onClose={closeDropdown}
       onSelect={onSelect}
+      className="w-full"
     />
   )
 }
