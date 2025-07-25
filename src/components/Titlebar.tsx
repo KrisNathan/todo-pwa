@@ -19,7 +19,7 @@ export default function Titlebar() {
   }, [location.pathname]);
 
   return (
-    <div className="w-full flex flex-row gap-4 typography-regular">
+    <div className="w-full flex flex-row gap-4 typography-regular select-none">
       <h1 className="select-none flex-1">{title}</h1>
       <div className="flex flex-row gap-1">
         <MdCheckCircleOutline size={24} color="var(--color-red)" />
