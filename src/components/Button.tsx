@@ -1,11 +1,12 @@
 import { useBatterySaver } from '../hooks/useBatterySaver';
 
-type Variant = "primary" | "secondary";
+type Variant = "primary" | "secondary" | "text";
 interface ButtonProps {
   children?: React.ReactNode;
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   className?: string;
   variant?: Variant;
+  disabled?: boolean;
 }
 
 const getVariantClass = (variant: Variant) => {
@@ -14,15 +15,19 @@ const getVariantClass = (variant: Variant) => {
       return "bg-primary hover:bg-primary-hover";
     case "secondary":
       return "bg-secondary hover:bg-secondary-hover";
+    case "text":
+      return "bg-transparent hover:bg-secondary-hover";
     default:
       return "";
   }
 };
 
-export default function Button({ children, onClick, className, variant = "primary" }: ButtonProps) {
+export default function Button({ children, onClick, className, variant = "primary", disabled = false }: ButtonProps) {
   const { isBatterySaverMode } = useBatterySaver();
 
   const onClickHandler = (event: React.MouseEvent<HTMLButtonElement>) => {
+    if (disabled) return;
+    
     event.stopPropagation();
     
     // Only vibrate if not in battery saver mode and vibration is supported
@@ -34,8 +39,13 @@ export default function Button({ children, onClick, className, variant = "primar
   };
   return (
     <button
-      className={`px-4 py-2 rounded-xl text-left cursor-pointer select-none transition-all active:animate-(--anim-click) ${getVariantClass(variant)} ${className}`}
+      className={`px-4 py-2 rounded-xl text-left select-none transition-all ${
+        disabled 
+          ? 'cursor-not-allowed opacity-50' 
+          : 'cursor-pointer active:animate-(--anim-click)'
+      } typography-regular ${getVariantClass(variant)} ${className}`}
       onClick={onClickHandler}
+      disabled={disabled}
     >
       {children}
     </button>
