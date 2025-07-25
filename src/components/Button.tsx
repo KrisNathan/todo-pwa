@@ -1,7 +1,7 @@
 type Variant = "primary" | "secondary";
 interface ButtonProps {
   children?: React.ReactNode;
-  onClick?: () => void;
+  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   className?: string;
   variant?: Variant;
 }
@@ -22,7 +22,7 @@ export default function Button({ children, onClick, className, variant = "primar
   const onClickHandler = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
     navigator.vibrate(50);
-    onClick?.();
+    onClick?.(event);
   };
   return (
     <button
