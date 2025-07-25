@@ -59,9 +59,8 @@ export default function Dropdown({ selectedValue, options, isOpen, onOpen, onClo
   };
 
 
-  return <>
+  return <div className="relative">
     <Button
-      className="relative"
       onClick={buttonOnClickHandler}
     >
       <div className="flex flex-row">
@@ -69,24 +68,24 @@ export default function Dropdown({ selectedValue, options, isOpen, onOpen, onClo
         <MdArrowDropDown size={24} />
       </div>
 
-      {isOpen && (
-        <div ref={dropdownDivRef} className="absolute top-12 left-0 bg-secondary rounded-xl w-full flex flex-col p-2 gap-1 animate-(--anim-enter-slide-down) z-50">
-          {unselectedOptions.map((option) => (
-            <Button
-              variant="secondary"
-              key={option.value}
-              className="p-2 hover:bg-secondary cursor-pointer"
-              onClick={() => onSelectHandler(option.value)}
-            >
-              {option.label}
-            </Button>
-          ))}
-        </div>
-      )}
     </Button>
-    
+    {isOpen && (
+      <div ref={dropdownDivRef} className="absolute top-12 left-0 bg-secondary rounded-xl w-full flex flex-col p-2 gap-1 animate-(--anim-enter-slide-down) z-50">
+        {unselectedOptions.map((option) => (
+          <Button
+            variant="secondary"
+            key={option.value}
+            className="p-2 hover:bg-secondary cursor-pointer"
+            onClick={() => onSelectHandler(option.value)}
+          >
+            {option.label}
+          </Button>
+        ))}
+      </div>
+    )}
+
     {isOpen && (
       <div className="fixed inset-0 z-40 cursor-default" onClick={outsideClickHandler}></div>
     )}
-  </>
+  </div>
 }
