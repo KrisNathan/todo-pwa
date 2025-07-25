@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useBatterySaver } from '../hooks/useBatterySaver';
 
 interface SwitchProps {
   checked?: boolean;
@@ -13,6 +14,7 @@ export default function Switch({
   disabled = false, 
   className = '' 
 }: SwitchProps) {
+    const { isBatterySaverMode } = useBatterySaver();
   const [isChecked, setIsChecked] = useState(checked);
 
   const handleToggle = () => {
@@ -20,7 +22,9 @@ export default function Switch({
     
     const newChecked = !isChecked;
     setIsChecked(newChecked);
-    navigator.vibrate?.(50);
+    if (!isBatterySaverMode && 'vibrate' in navigator) {
+      navigator.vibrate(50);
+    }
     onChange?.(newChecked);
   };
 

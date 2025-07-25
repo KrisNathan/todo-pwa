@@ -1,3 +1,5 @@
+import { useBatterySaver } from "../hooks/useBatterySaver";
+
 type Variant = "primary" | "secondary";
 interface IconButtonProps {
   children?: React.ReactNode;
@@ -19,9 +21,13 @@ const getVariantClass = (variant: Variant) => {
 };
 
 export default function IconButton({ children, onClick, className, variant = "primary" }: IconButtonProps) {
+  const { isBatterySaverMode } = useBatterySaver();
+
   const onClickHandler = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
-    navigator.vibrate(50);
+    if (!isBatterySaverMode && 'vibrate' in navigator) {
+      navigator.vibrate(50);
+    }
     onClick?.(event);
   };
   return (
