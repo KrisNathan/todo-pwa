@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
-import Switch from "../components/Switch";
 import CodeBox from "../components/textbox/CodeBox";
 import Button from "../components/Button";
 import { MdDarkMode, MdHdrAuto, MdLightMode } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
+import useCodeStore from "../stores/codeStore";
 
 // Type definition for BeforeInstallPromptEvent
 interface BeforeInstallPromptEvent extends Event {
@@ -15,8 +16,8 @@ interface BeforeInstallPromptEvent extends Event {
 }
 
 export default function SettingsPage() {
-  const [syncEnabled, setSyncEnabled] = useState(false);
-  const [syncCode, setSyncCode] = useState("your-sync-code-here");
+  const navigate = useNavigate();
+  const {syncCode, setSyncCode} = useCodeStore();
   const [deviceName, setDeviceName] = useState("My Device");
 
   const [isInstalled, setIsInstalled] = useState(false);
@@ -27,13 +28,13 @@ export default function SettingsPage() {
     const checkInstallation = () => {
       // Method 1: Check display mode
       const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
-      
+
       // Method 2: Check if running in PWA mode (iOS Safari)
       const isIOSStandalone = (window.navigator as Navigator & { standalone?: boolean }).standalone === true;
-      
+
       // Method 3: Check for Android TWA
       const isAndroidTWA = document.referrer.includes('android-app://');
-      
+
       setIsInstalled(isStandalone || isIOSStandalone || isAndroidTWA);
     };
 
@@ -65,7 +66,7 @@ export default function SettingsPage() {
 
     deferredPrompt.prompt();
     const { outcome } = await deferredPrompt.userChoice;
-    
+
     if (outcome === 'accepted') {
       setDeferredPrompt(null);
     }
@@ -75,8 +76,8 @@ export default function SettingsPage() {
     <div className="flex flex-col w-full h-full gap-4 select-none">
       <div>WORK IN PROGRESS</div>
 
-      <h1 className="typography-large">Install</h1>
       <div className="flex flex-col gap-2">
+        <h1 className="typography-large">Install</h1>
         <div className="typography-small text-text-secondary">
           Install as a PWA for faster loading, offline access, native app experience, and minimal storage usage.
         </div>
@@ -95,18 +96,10 @@ export default function SettingsPage() {
         )}
       </div>
 
-      <h1 className="typography-large">Sync</h1>
       <div className="flex flex-col gap-2">
-        <div className="typography-regular">Sync Status</div>
+        <h1 className="typography-large">Sync</h1>
         <div className="typography-small text-text-secondary">Sync data across devices. Your data is encrypted before transit. Our servers can't see the contents of your data.</div>
-        <div className="flex flex-row gap-2 items-center">
-          <Switch onChange={setSyncEnabled} />
-          {syncEnabled ? (
-            <div className="typography-small text-green">Enabled</div>
-          ) : (
-            <div className="typography-small text-red">Disabled</div>
-          )}
-        </div>
+        <Button className="w-full" onClick={() => navigate('/sync_setup')}>Enable Sync</Button>
       </div>
 
       <div className="flex flex-col gap-2">
@@ -121,20 +114,22 @@ export default function SettingsPage() {
         <CodeBox value={deviceName} onChange={setDeviceName} isEditable />
       </div>
 
-      <h1 className="typography-large">Theme</h1>
-      <div className="flex flex-row gap-2">
-        <Button variant="secondary" className="flex-1 flex flex-row gap-2 items-center justify-center">
-          <MdDarkMode size={24} />
-          <div className="typography-small">Dark</div>
-        </Button>
-        <Button variant="secondary" className="flex-1 flex flex-row gap-2 items-center justify-center">
-          <MdLightMode size={24} />
-          <div className="typography-small">Light</div>
-        </Button>
-        <Button variant="primary" className="flex-1 flex flex-row gap-2 items-center justify-center">
-          <MdHdrAuto size={24} />
-          <div className="typography-small">System</div>
-        </Button>
+      <div className="flex flex-col gap-2">
+        <h1 className="typography-large">Theme</h1>
+        <div className="flex flex-row gap-2">
+          <Button variant="secondary" className="flex-1 flex flex-row gap-2 items-center justify-center">
+            <MdDarkMode size={24} />
+            <div className="typography-regular">Dark</div>
+          </Button>
+          <Button variant="secondary" className="flex-1 flex flex-row gap-2 items-center justify-center">
+            <MdLightMode size={24} />
+            <div className="typography-regular">Light</div>
+          </Button>
+          <Button variant="primary" className="flex-1 flex flex-row gap-2 items-center justify-center">
+            <MdHdrAuto size={24} />
+            <div className="typography-regular">System</div>
+          </Button>
+        </div>
       </div>
     </div>
   )

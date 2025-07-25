@@ -11,9 +11,10 @@ interface CodeBoxProps {
   isCopyable?: boolean;
   isEditable?: boolean;
   isRandomizable?: boolean;
+  enforceMnemonic?: boolean;
 }
 
-export default function CodeBox({ value = "", onChange, isHidden = false, isCopyable = false, isEditable = false, isRandomizable = false }: CodeBoxProps) {
+export default function CodeBox({ value = "", onChange, isHidden = false, isCopyable = false, isEditable = false, isRandomizable = false, enforceMnemonic = false }: CodeBoxProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [editValue, setEditValue] = useState("");
 
