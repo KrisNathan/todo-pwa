@@ -43,7 +43,7 @@ export default function CodeBox({ value = "", onChange }: CodeBoxProps) {
         />
       ) : (
         <div className="flex-1 typography-regular rounded-xl px-4 py-2 bg-secondary hover:bg-secondary-hover cursor-pointer text-text-secondary" onClick={handleCopy}>
-          {'•'.repeat(Math.max(8, value.length))}
+          {'•'.repeat(8)}
         </div>
       )}
       
