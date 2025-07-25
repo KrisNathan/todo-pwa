@@ -38,7 +38,7 @@ export default function CodeBox({ value = "", onChange }: CodeBoxProps) {
           type="text"
           value={editValue}
           onChange={(e) => setEditValue(e.target.value)}
-          className="flex-1 typography-regular rounded-xl px-4 py-2 bg-secondary border-none outline-none focus:ring-2 focus:ring-blue-500"
+          className="flex-1 min-w-0 typography-regular rounded-xl px-4 py-2 bg-secondary border-none outline-none focus:ring-2 focus:ring-blue-500"
           autoFocus
         />
       ) : (
