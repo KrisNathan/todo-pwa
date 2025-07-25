@@ -32,7 +32,7 @@ export default function CodeBox({ value = "", onChange }: CodeBoxProps) {
   };
 
   return (
-    <div className="flex flex-row gap-2">
+    <div className="flex flex-row gap-2 w-full">
       {isEditing ? (
         <input
           type="text"
