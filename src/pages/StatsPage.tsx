@@ -1,8 +1,11 @@
+import StatCard from "../components/StatCard";
+
 export default function StatsPage() {
   return (
-    <div>
-      <h1>Statistics Page</h1>
-      <p>This page displays various statistics related to your application.</p>
+    <div className="flex flex-col w-full h-full gap-4">
+      <h1 className="typography-large select-none">Your Journey</h1>
+      <StatCard title="Tasks Done" icon="✅" value={100} />
+      <StatCard title="Day Streak" icon="🔥" value={100} />
     </div>
   )
 }
