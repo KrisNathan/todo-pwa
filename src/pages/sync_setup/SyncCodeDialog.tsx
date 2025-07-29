@@ -1,7 +1,7 @@
 import FullScreenModal from "../../components/modal/FullScreenModal";
 import Button from "../../components/Button";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { validateMnemonic } from "@scure/bip39";
 import { wordlist } from "@scure/bip39/wordlists/english";
 import useCodeStore from "../../stores/codeStore";
@@ -12,6 +12,10 @@ export default function SyncCodeDialog() {
 
   const [tempCode, setTempCode] = useState("");
   const [isValid, setIsValid] = useState(false);
+
+  const isEmpty = useMemo(() => {
+    return tempCode.trim() === "";
+  }, [tempCode]);
 
   return (
     <FullScreenModal className="flex flex-col gap-4 p-4 bg-background">
@@ -38,7 +42,7 @@ export default function SyncCodeDialog() {
           }
         }}
       />
-      {!isValid &&
+      {!isValid && !isEmpty &&
         <div className="text-red typography-small">Invalid sync code!</div>
       }
 
