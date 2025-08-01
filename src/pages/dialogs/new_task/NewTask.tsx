@@ -1,10 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import Button from "../../components/Button";
-import FullScreenModal from "../../components/modal/FullScreenModal";
-import TextBox from "../../components/textbox/TextBox";
-import DateTimePicker from "../../components/DateTimePicker";
-import useTodoStore from "../../stores/todoStore";
+import Button from "../../../components/Button";
+import FullScreenModal from "../../../components/modal/FullScreenModal";
+import TextBox from "../../../components/textbox/TextBox";
+import DateTimePicker from "../../../components/DateTimePicker";
+import useTodoStore from "../../../stores/todoStore";
 
 export default function NewTask() {
   const navigate = useNavigate();

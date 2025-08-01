@@ -1,8 +1,8 @@
-import FullScreenModal from "../../components/modal/FullScreenModal";
-import Button from "../../components/Button";
+import FullScreenModal from "../../../components/modal/FullScreenModal";
+import Button from "../../../components/Button";
 import { useNavigate } from "react-router-dom";
 import { useMemo } from "react";
-import useCodeStore from "../../stores/codeStore";
+import useCodeStore from "../../../stores/codeStore";
 
 export default function SyncSetupNewChain() {
   const { syncCode, generateSyncCode } = useCodeStore();

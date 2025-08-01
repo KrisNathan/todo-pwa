@@ -1,5 +1,5 @@
-import FullScreenModal from "../../components/modal/FullScreenModal";
-import Button from "../../components/Button";
+import FullScreenModal from "../../../components/modal/FullScreenModal";
+import Button from "../../../components/Button";
 import { useNavigate } from "react-router-dom";
 
 export default function SyncSetupInitial() {

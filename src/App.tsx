@@ -6,11 +6,11 @@ import StatsPage from './pages/StatsPage'
 import SettingsPage from './pages/SettingsPage'
 import PageLayout from './layout/PageLayout'
 
-import SyncSetupInitial from './pages/sync_setup/SyncSetupInitial'
-import SyncSetupJoinChain from './pages/sync_setup/SyncSetupJoinChain'
-import SyncSetupNewChain from './pages/sync_setup/SyncSetupNewChain'
+import SyncSetupInitial from './pages/dialogs/sync_setup/SyncSetupInitial'
+import SyncSetupJoinChain from './pages/dialogs/sync_setup/SyncSetupJoinChain'
+import SyncSetupNewChain from './pages/dialogs/sync_setup/SyncSetupNewChain'
 
-import NewTask from './pages/new_task/NewTask'
+import NewTask from './pages/dialogs/new_task/NewTask'
 
 function App() {
   return (

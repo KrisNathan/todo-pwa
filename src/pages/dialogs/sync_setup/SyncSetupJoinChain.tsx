@@ -1,10 +1,10 @@
-import FullScreenModal from "../../components/modal/FullScreenModal";
-import Button from "../../components/Button";
+import FullScreenModal from "../../../components/modal/FullScreenModal";
+import Button from "../../../components/Button";
 import { useNavigate } from "react-router-dom";
 import { useMemo, useState } from "react";
 import { validateMnemonic } from "@scure/bip39";
 import { wordlist } from "@scure/bip39/wordlists/english";
-import useCodeStore from "../../stores/codeStore";
+import useCodeStore from "../../../stores/codeStore";
 
 export default function SyncSetupJoinChain() {
   const navigate = useNavigate();
