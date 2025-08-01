@@ -19,8 +19,8 @@ export default function SyncSetupInitial() {
       </div>
       <div className="flex-1"></div>
       <div className="flex flex-row gap-2">
-        <Button variant="secondary" className="flex-1 !text-center" onClick={() => navigate('/sync_setup/new_code')}>No</Button>
-        <Button variant="primary" className="flex-1 !text-center" onClick={() => navigate('/sync_setup/has_code')}>Yes</Button>
+        <Button variant="secondary" className="flex-1 !text-center" onClick={() => navigate('/sync_setup/new_chain')}>No</Button>
+        <Button variant="primary" className="flex-1 !text-center" onClick={() => navigate('/sync_setup/join_chain')}>Yes</Button>
       </div>
     </FullScreenModal>
   )
