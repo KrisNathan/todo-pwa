@@ -16,7 +16,7 @@ export default function SyncSetupNewChain() {
   const navigate = useNavigate();
   return (
     <FullScreenModal className="flex flex-col gap-4 p-4 bg-background">
-      <div className="flex flex-row gap-2 items-center">
+      <div className="flex flex-row gap-2">
         <div className="typography-regular flex-1">Sync Setup</div>
         {/* <Button variant="text" className="text-red" onClick={() => navigate('/settings')}>Cancel</Button> */}
       </div>
