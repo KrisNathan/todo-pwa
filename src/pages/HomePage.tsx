@@ -5,6 +5,7 @@ import FloatingActionButton from "../components/FloatingActionButton";
 import { useNavigate } from "react-router-dom";
 import useTodoStore from "../stores/todoStore";
 import { useMemo } from "react";
+import TaskCard from "../components/TaskCard";
 
 export default function HomePage() {
   const navigate = useNavigate();
@@ -39,7 +40,7 @@ export default function HomePage() {
     const tomorrow = new Date();
     tomorrow.setHours(0, 0, 0, 0);
     tomorrow.setDate(now.getDate() + 1);
-    return tasks.filter(task => task.dueDate && new Date(task.dueDate) >= tomorrow && !task.completed);
+    return tasks.filter(task => task.dueDate ? new Date(task.dueDate) >= tomorrow && !task.completed : true);
   }, [tasks]);
 
   const handleNewTask = () => {
@@ -57,27 +58,21 @@ export default function HomePage() {
             <div className="typography-medium text-red text-center select-none">Overdue</div>
           }
           {overdueTasks.map(task => (
-            <div key={task.id} className="typography-regular text-red text-center select-none">
-              {task.title} - Due: {task.dueDate ? new Date(task.dueDate).toLocaleString() : 'No date set'}
-            </div>
+            <TaskCard key={task.id} task={task} />
           ))}
 
           {todayTasks.length > 0 &&
             <div className="typography-medium text-center select-none">Today</div>
           }
           {todayTasks.map(task => (
-            <div key={task.id} className="typography-regular text-center select-none">
-              {task.title} - Due: {task.dueDate ? new Date(task.dueDate).toLocaleString() : 'No date set'}
-            </div>
+            <TaskCard key={task.id} task={task} />
           ))}
 
           {futureTasks.length > 0 &&
             <div className="typography-medium text-text-secondary text-center select-none">Future</div>
           }
           {futureTasks.map(task => (
-            <div key={task.id} className="typography-regular text-text-secondary text-center select-none">
-              {task.title} - Due: {task.dueDate ? new Date(task.dueDate).toLocaleString() : 'No date set'}
-            </div>
+            <TaskCard key={task.id} task={task} />
           ))}
         </>
       }
