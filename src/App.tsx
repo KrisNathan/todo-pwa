@@ -11,6 +11,7 @@ import SyncSetupJoinChain from './pages/dialogs/sync_setup/SyncSetupJoinChain'
 import SyncSetupNewChain from './pages/dialogs/sync_setup/SyncSetupNewChain'
 
 import NewTask from './pages/dialogs/new_task/NewTask'
+import EditTask from './pages/dialogs/edit_task/EditTask'
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
           <Route path='/sync_setup/new_chain' element={<SyncSetupNewChain />} />
 
           <Route path='/new_task' element={<NewTask />} />
+          <Route path='/edit_task/:taskId' element={<EditTask />} />
         </Route>
       </Routes>
     </Router>

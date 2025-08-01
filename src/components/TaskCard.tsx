@@ -3,6 +3,7 @@ import type { Task } from "../stores/todoStore";
 import ContextMenu from "./ContextMenu";
 import { useRef, useState } from "react";
 import useTodoStore from "../stores/todoStore";
+import { useNavigate } from "react-router-dom";
 
 interface TaskCardProps {
   task: Task;
@@ -10,6 +11,7 @@ interface TaskCardProps {
 }
 
 export default function TaskCard({ task }: TaskCardProps) {
+  const navigate = useNavigate();
   const mousePosition = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
   const [isContextMenuOpen, setIsContextMenuOpen] = useState(false);
 
@@ -25,7 +27,7 @@ export default function TaskCard({ task }: TaskCardProps) {
     mousePosition.current = { x: e.clientX, y: e.clientY };
   };
 
-  const handleEdit = () => { }
+  const handleEdit = () => { navigate(`/edit_task/${task.id}`) }
 
   const handleDelete = () => { }
 
@@ -57,7 +59,7 @@ export default function TaskCard({ task }: TaskCardProps) {
           setIsContextMenuOpen(false);
         }}
         items={[
-          { label: 'Edit', onClick: handleEdit || (() => { }), icon: <MdEdit size={20} /> },
+          { label: 'Edit', onClick: handleEdit, icon: <MdEdit size={20} /> },
           { label: 'Delete', onClick: handleDelete, icon: <MdDelete size={20} /> },
         ]}
       />
