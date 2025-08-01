@@ -29,7 +29,7 @@ export default function TaskCard({ task }: TaskCardProps) {
 
   const handleEdit = () => { navigate(`/task/edit/${task.id}`) }
 
-  const handleDelete = () => { }
+  const handleDelete = () => { navigate(`/task/delete/${task.id}`) }
 
   return (
     <>

@@ -12,6 +12,7 @@ import SyncSetupNewChain from './pages/dialogs/sync_setup/SyncSetupNewChain'
 
 import NewTask from './pages/dialogs/new_task/NewTask'
 import EditTask from './pages/dialogs/edit_task/EditTask'
+import DeleteTask from './pages/dialogs/delete_task/DeleteTask'
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
 
           <Route path='/task/new' element={<NewTask />} />
           <Route path='/task/edit/:taskId' element={<EditTask />} />
+          <Route path='/task/delete/:taskId' element={<DeleteTask />} />
         </Route>
       </Routes>
     </Router>
