@@ -10,6 +10,8 @@ import SyncSetupInitial from './pages/sync_setup/SyncSetupInitial'
 import SyncSetupJoinChain from './pages/sync_setup/SyncSetupJoinChain'
 import SyncSetupNewChain from './pages/sync_setup/SyncSetupNewChain'
 
+import NewTask from './pages/new_task/NewTask'
+
 function App() {
   return (
     <Router>
@@ -25,6 +27,8 @@ function App() {
           <Route path='/sync_setup' element={<SyncSetupInitial />} />
           <Route path='/sync_setup/join_chain' element={<SyncSetupJoinChain />} />
           <Route path='/sync_setup/new_chain' element={<SyncSetupNewChain />} />
+
+          <Route path='/new_task' element={<NewTask />} />
         </Route>
       </Routes>
     </Router>
