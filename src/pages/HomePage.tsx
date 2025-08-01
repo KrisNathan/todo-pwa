@@ -48,7 +48,7 @@ export default function HomePage() {
   }, [tasks]);
 
   const handleNewTask = () => {
-    navigate('/new_task');
+    navigate('/task/new');
   };
 
   return (

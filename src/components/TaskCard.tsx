@@ -27,7 +27,7 @@ export default function TaskCard({ task }: TaskCardProps) {
     mousePosition.current = { x: e.clientX, y: e.clientY };
   };
 
-  const handleEdit = () => { navigate(`/edit_task/${task.id}`) }
+  const handleEdit = () => { navigate(`/task/edit/${task.id}`) }
 
   const handleDelete = () => { }
 

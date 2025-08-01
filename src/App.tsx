@@ -29,8 +29,8 @@ function App() {
           <Route path='/sync_setup/join_chain' element={<SyncSetupJoinChain />} />
           <Route path='/sync_setup/new_chain' element={<SyncSetupNewChain />} />
 
-          <Route path='/new_task' element={<NewTask />} />
-          <Route path='/edit_task/:taskId' element={<EditTask />} />
+          <Route path='/task/new' element={<NewTask />} />
+          <Route path='/task/edit/:taskId' element={<EditTask />} />
         </Route>
       </Routes>
     </Router>
