@@ -43,6 +43,10 @@ export default function HomePage() {
     return tasks.filter(task => task.dueDate ? new Date(task.dueDate) >= tomorrow && !task.completed : true);
   }, [tasks]);
 
+  const completedTasks = useMemo(() => {
+    return tasks.filter(task => task.completed);
+  }, [tasks]);
+
   const handleNewTask = () => {
     navigate('/new_task');
   };
@@ -72,6 +76,13 @@ export default function HomePage() {
             <div className="typography-medium text-text-secondary text-center select-none">Future</div>
           }
           {futureTasks.map(task => (
+            <TaskCard key={task.id} task={task} />
+          ))}
+
+          {completedTasks.length > 0 &&
+            <div className="typography-medium text-text-secondary text-center select-none">Completed</div>
+          }
+          {completedTasks.map(task => (
             <TaskCard key={task.id} task={task} />
           ))}
         </>
