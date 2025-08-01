@@ -2,7 +2,7 @@ import FullScreenModal from "../../components/modal/FullScreenModal";
 import Button from "../../components/Button";
 import { useNavigate } from "react-router-dom";
 
-export default function SyncSetupInitialDialog() {
+export default function SyncSetupInitial() {
   const navigate = useNavigate();
   return (
     <FullScreenModal className="flex flex-col gap-4 p-4 bg-background">

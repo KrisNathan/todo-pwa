@@ -6,7 +6,7 @@ import { validateMnemonic } from "@scure/bip39";
 import { wordlist } from "@scure/bip39/wordlists/english";
 import useCodeStore from "../../stores/codeStore";
 
-export default function SyncCodeDialog() {
+export default function SyncSetupJoinChain() {
   const navigate = useNavigate();
   const { setSyncCode } = useCodeStore();
 

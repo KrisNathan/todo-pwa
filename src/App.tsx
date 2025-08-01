@@ -5,9 +5,9 @@ import HomePage from './pages/HomePage'
 import StatsPage from './pages/StatsPage'
 import SettingsPage from './pages/SettingsPage'
 import PageLayout from './layout/PageLayout'
-import SyncSetupInitialDialog from './pages/sync_setup/SyncSetupInitialDialog'
-import SyncCodeDialog from './pages/sync_setup/SyncCodeDialog'
-import SyncCodeNewDialog from './pages/sync_setup/SyncCodeNewDialog'
+import SyncSetupInitial from './pages/sync_setup/SyncSetupInitial'
+import SyncSetupJoinChain from './pages/sync_setup/SyncSetupJoinChain'
+import SyncSetupNewChain from './pages/sync_setup/SyncSetupNewChain'
 
 function App() {
   return (
@@ -21,9 +21,9 @@ function App() {
             <Route path='/settings' element={<SettingsPage />} />
           </Route>
 
-          <Route path='/sync_setup' element={<SyncSetupInitialDialog />} />
-          <Route path='/sync_setup/has_code' element={<SyncCodeDialog />} />
-          <Route path='/sync_setup/new_code' element={<SyncCodeNewDialog />} />
+          <Route path='/sync_setup' element={<SyncSetupInitial />} />
+          <Route path='/sync_setup/has_code' element={<SyncSetupJoinChain />} />
+          <Route path='/sync_setup/new_code' element={<SyncSetupNewChain />} />
         </Route>
       </Routes>
     </Router>

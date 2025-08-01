@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useMemo } from "react";
 import useCodeStore from "../../stores/codeStore";
 
-export default function SyncCodeNewDialog() {
+export default function SyncSetupNewChain() {
   const { syncCode, generateSyncCode } = useCodeStore();
   useMemo(() => {
     if (!syncCode) {
