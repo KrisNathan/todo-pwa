@@ -1,6 +1,6 @@
 import { useBatterySaver } from '../hooks/useBatterySaver';
 
-type Variant = "primary" | "secondary" | "text";
+type Variant = "primary" | "secondary" | "text" | "danger";
 interface ButtonProps {
   children?: React.ReactNode;
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
@@ -17,6 +17,8 @@ const getVariantClass = (variant: Variant) => {
       return "bg-secondary hover:bg-secondary-hover";
     case "text":
       return "bg-transparent hover:bg-secondary-hover";
+    case "danger":
+      return "bg-red hover:bg-red-hover text-white";
     default:
       return "";
   }
