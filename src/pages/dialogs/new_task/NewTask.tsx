@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import Button from "../../../components/Button";
 import FullScreenModal from "../../../components/modal/FullScreenModal";
 import TextBox from "../../../components/textbox/TextBox";
@@ -11,6 +11,8 @@ export default function NewTask() {
   const addTask = useTodoStore((state) => state.addTask);
   const [taskTitle, setTaskTitle] = useState("");
   const [dueDate, setDueDate] = useState<Date | null>(null);
+
+  const isValid = useMemo(() => taskTitle.trim().length > 0, [taskTitle]);
 
   const handleCreateTask = () => {
     if (taskTitle.trim()) {
@@ -52,6 +54,7 @@ export default function NewTask() {
           variant="primary" 
           className="flex-1 !text-center"
           onClick={handleCreateTask}
+          disabled={!isValid}
         >
           Done
         </Button>
