@@ -40,7 +40,10 @@ export default function HomePage() {
     const tomorrow = new Date();
     tomorrow.setHours(0, 0, 0, 0);
     tomorrow.setDate(now.getDate() + 1);
-    return tasks.filter(task => task.dueDate ? new Date(task.dueDate) >= tomorrow && !task.completed : true);
+    return tasks.filter(task => task.dueDate ? 
+      new Date(task.dueDate) >= tomorrow && !task.completed : 
+      !task.completed
+    );
   }, [tasks]);
 
   const completedTasks = useMemo(() => {
