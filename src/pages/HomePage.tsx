@@ -6,48 +6,27 @@ import { useNavigate } from "react-router-dom";
 import useTodoStore from "../stores/todoStore";
 import { useMemo } from "react";
 import TaskCard from "../components/TaskCard";
+import TodoFilter from "../utils/todoFilter";
 
 export default function HomePage() {
   const navigate = useNavigate();
 
   const { tasks } = useTodoStore();
 
-  // Tasks with:
-  // dueDate earlier than now
-  // completed is false
   const overdueTasks = useMemo(() => {
-    return tasks.filter(task => task.dueDate && new Date(task.dueDate) < new Date() && !task.completed);
+    return TodoFilter.overdue(tasks);
   }, [tasks]);
 
-  // Tasks with:
-  // dueDate later than now
-  // earlier than tomorrow
-  // completed is false
   const todayTasks = useMemo(() => {
-    const now = new Date();
-    return tasks.filter(task => task.dueDate &&
-      new Date(task.dueDate).toDateString() === now.toDateString() &&
-      new Date(task.dueDate) >= now &&
-      !task.completed
-    );
+   return TodoFilter.today(tasks);
   }, [tasks]);
 
-  // Tasks with:
-  // dueDate later than tomorrow
-  // completed is false
   const futureTasks = useMemo(() => {
-    const now = new Date();
-    const tomorrow = new Date();
-    tomorrow.setHours(0, 0, 0, 0);
-    tomorrow.setDate(now.getDate() + 1);
-    return tasks.filter(task => task.dueDate ? 
-      new Date(task.dueDate) >= tomorrow && !task.completed : 
-      !task.completed
-    );
+   return TodoFilter.future(tasks);
   }, [tasks]);
 
   const completedTasks = useMemo(() => {
-    return tasks.filter(task => task.completed);
+    return TodoFilter.completed(tasks);
   }, [tasks]);
 
   const handleNewTask = () => {
