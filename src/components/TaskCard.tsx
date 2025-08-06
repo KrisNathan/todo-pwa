@@ -25,6 +25,7 @@ export default function TaskCard({ task }: TaskCardProps) {
     e.preventDefault();
     setIsContextMenuOpen(true);
     mousePosition.current = { x: e.clientX, y: e.clientY };
+    navigator.vibrate(75);
   };
 
   const handleEdit = () => { navigate(`/task/edit/${task.id}`) }
