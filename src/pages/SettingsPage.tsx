@@ -1,65 +1,17 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import CodeBox from "../components/textbox/CodeBox";
 import Button from "../components/Button";
 import { MdDarkMode, MdHdrAuto, MdLightMode } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import useCodeStore from "../stores/codeStore";
-
-// Type definition for BeforeInstallPromptEvent
-interface BeforeInstallPromptEvent extends Event {
-  readonly platforms: string[];
-  readonly userChoice: Promise<{
-    outcome: 'accepted' | 'dismissed';
-    platform: string;
-  }>;
-  prompt(): Promise<void>;
-}
+import useInstallStore from "../stores/installStore";
 
 export default function SettingsPage() {
   const navigate = useNavigate();
-  const {syncCode, setSyncCode} = useCodeStore();
+  const { syncCode, setSyncCode } = useCodeStore();
   const [deviceName, setDeviceName] = useState("My Device");
 
-  const [isInstalled, setIsInstalled] = useState(false);
-  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
-
-  useEffect(() => {
-    // Check if app is already installed
-    const checkInstallation = () => {
-      // Method 1: Check display mode
-      const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
-
-      // Method 2: Check if running in PWA mode (iOS Safari)
-      const isIOSStandalone = (window.navigator as Navigator & { standalone?: boolean }).standalone === true;
-
-      // Method 3: Check for Android TWA
-      const isAndroidTWA = document.referrer.includes('android-app://');
-
-      setIsInstalled(isStandalone || isIOSStandalone || isAndroidTWA);
-    };
-
-    checkInstallation();
-
-    // Listen for beforeinstallprompt event
-    const handleBeforeInstallPrompt = (e: BeforeInstallPromptEvent) => {
-      e.preventDefault();
-      setDeferredPrompt(e);
-    };
-
-    // Listen for app installed event
-    const handleAppInstalled = () => {
-      setIsInstalled(true);
-      setDeferredPrompt(null);
-    };
-
-    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt as EventListener);
-    window.addEventListener('appinstalled', handleAppInstalled);
-
-    return () => {
-      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt as EventListener);
-      window.removeEventListener('appinstalled', handleAppInstalled);
-    };
-  }, []);
+  const { isInstalled, deferredPrompt, setDeferredPrompt } = useInstallStore();
 
   const handleInstallClick = async () => {
     if (!deferredPrompt) return;
