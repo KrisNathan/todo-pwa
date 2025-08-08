@@ -22,7 +22,6 @@ export default function WorkspaceDropdown() {
   const setCurrentWorkspaceId = useTodoStore(state => state.setCurrentWorkspaceId);
 
   const onSelect = (value: string | number) => {
-    console.log("Selected workspace:", value);
     setCurrentWorkspaceId(value as string);
   };
 
