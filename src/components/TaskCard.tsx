@@ -18,6 +18,7 @@ export default function TaskCard({ task }: TaskCardProps) {
   const { updateTask } = useTodoStore();
 
   const toggleCompletion = () => {
+    navigator.vibrate(50);
     updateTask(task.id, { completed: !task.completed });
   };
 
