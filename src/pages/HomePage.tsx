@@ -11,18 +11,22 @@ import TodoFilter from "../utils/todoFilter";
 export default function HomePage() {
   const navigate = useNavigate();
 
-  const { tasks } = useTodoStore();
+  const allTasks = useTodoStore((state) => state.tasks);
+  const currentWorkspaceId = useTodoStore((state) => state.currentWorkspaceId);
+  const tasks = useMemo(() => {
+    return TodoFilter.byWorkspaceId(allTasks, currentWorkspaceId);
+  }, [allTasks, currentWorkspaceId]);
 
   const overdueTasks = useMemo(() => {
     return TodoFilter.overdue(tasks);
   }, [tasks]);
 
   const todayTasks = useMemo(() => {
-   return TodoFilter.today(tasks);
+    return TodoFilter.today(tasks);
   }, [tasks]);
 
   const futureTasks = useMemo(() => {
-   return TodoFilter.future(tasks);
+    return TodoFilter.future(tasks);
   }, [tasks]);
 
   const completedTasks = useMemo(() => {

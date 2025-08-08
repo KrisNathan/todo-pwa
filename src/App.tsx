@@ -14,6 +14,8 @@ import NewTask from './pages/dialogs/new_task/NewTask'
 import EditTask from './pages/dialogs/edit_task/EditTask'
 import DeleteTask from './pages/dialogs/delete_task/DeleteTask'
 
+import NewWorkspace from './pages/dialogs/new_workspace/NewWorkspace'
+
 function App() {
   return (
     <Router>
@@ -33,6 +35,8 @@ function App() {
           <Route path='/task/new' element={<NewTask />} />
           <Route path='/task/edit/:taskId' element={<EditTask />} />
           <Route path='/task/delete/:taskId' element={<DeleteTask />} />
+
+          <Route path='/workspace/new' element={<NewWorkspace />} />
         </Route>
       </Routes>
     </Router>

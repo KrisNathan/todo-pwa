@@ -15,9 +15,10 @@ interface DropdownProps {
   onClose?: () => void;
   onSelect?: (value: string | number) => void; // do not setIsOpen(false) here, let onClose handle it
   className?: string;
+  children?: React.ReactNode
 }
 
-export default function Dropdown({ selectedValue, options, isOpen, onOpen, onClose, onSelect, className }: DropdownProps) {
+export default function Dropdown({ selectedValue, options, isOpen, onOpen, onClose, onSelect, className, children }: DropdownProps) {
   const findOptionByValue = (value: string | number) => {
     return options.find(option => option.value === value) || options[0];
   };
@@ -83,6 +84,7 @@ export default function Dropdown({ selectedValue, options, isOpen, onOpen, onClo
             {option.label}
           </Button>
         ))}
+        {children}
       </div>
     )}
 

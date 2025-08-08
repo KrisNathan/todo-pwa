@@ -11,15 +11,17 @@ export interface Task {
   listId: string;
 }
 
-export interface List {
+export interface Workspace {
   id: string;
-  icon: string; // emoji
-  title: string;
+  // icon: string; // emoji
+  name: string;
 }
 
 type State = {
   tasks: Task[];
-  lists: List[];
+  workspaces: Workspace[];
+  defaultWorkspaceId: string;
+  currentWorkspaceId: string;
 }
 
 type Actions = {
@@ -29,15 +31,25 @@ type Actions = {
   getTaskById: (taskId: string) => Task | undefined;
   getImportantTasks: () => Task[];
 
-  addList: (list: List) => void;
-  removeList: (listId: string) => void;
-  updateList: (listId: string, updates: Partial<List>) => void;
-  getListById: (listId: string) => List | undefined;
+  addWorkspace: (list: Workspace) => void;
+  removeWorkspace: (listId: string) => void;
+  updateWorkspace: (listId: string, updates: Partial<Workspace>) => void;
+  getWorkspaceById: (listId: string) => Workspace | undefined;
+  getWorkspaceByName: (name: string) => Workspace | undefined;
+
+  setCurrentWorkspaceId: (workspaceId: string) => void;
 }
+
+const defaultWorkspaceId = crypto.randomUUID();
 
 const useTodoStore = create<State & Actions>()(immer((set, get) => ({
   tasks: [],
-  lists: [],
+  workspaces: [{
+    name: "Default",
+    id: defaultWorkspaceId,
+  }],
+  defaultWorkspaceId,
+  currentWorkspaceId: defaultWorkspaceId,
 
   addTask: (task, taskIdOverride) => set((state) => {
     const newTask: Task = {
@@ -68,25 +80,38 @@ const useTodoStore = create<State & Actions>()(immer((set, get) => ({
     return state.tasks.filter(task => task.isImportant);
   },
 
-  addList: (list) => set((state) => {
-    state.lists.push(list);
+  addWorkspace: (list) => set((state) => {
+    state.workspaces.push(list);
   }),
 
-  removeList: (listId) => set((state) => {
-    state.lists = state.lists.filter(list => list.id !== listId);
+  removeWorkspace: (listId) => set((state) => {
+    state.workspaces = state.workspaces.filter(list => list.id !== listId);
     state.tasks = state.tasks.filter(task => task.listId !== listId);
   }),
 
-  updateList: (listId, updates) => set((state) => {
-    const list = state.lists.find(list => list.id === listId);
+  updateWorkspace: (listId, updates) => set((state) => {
+    const list = state.workspaces.find(list => list.id === listId);
     if (list) {
       Object.assign(list, updates);
     }
   }),
-  getListById: (listId: string): List | undefined => {
+  getWorkspaceById: (listId: string): Workspace | undefined => {
     const state = get();
-    return state.lists.find((list: List) => list.id === listId);
+    return state.workspaces.find((list: Workspace) => list.id === listId);
   },
+
+  getWorkspaceByName: (name: string): Workspace | undefined => {
+    const state = get();
+    return state.workspaces.find((list: Workspace) => list.name.toLowerCase() === name.toLowerCase());
+  },
+
+  setCurrentWorkspaceId: (workspaceId: string) => set((state) => {
+    if (state.workspaces.some(list => list.id === workspaceId)) {
+      state.currentWorkspaceId = workspaceId;
+    } else {
+      console.warn(`Workspace with ID ${workspaceId} does not exist`);
+    }
+  }),
 })));
 
 export default useTodoStore;

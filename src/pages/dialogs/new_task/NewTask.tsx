@@ -14,6 +14,8 @@ export default function NewTask() {
 
   const isValid = useMemo(() => taskTitle.trim().length > 0, [taskTitle]);
 
+  const currentWorkspaceId = useTodoStore((state) => state.currentWorkspaceId);
+
   const handleCreateTask = () => {
     if (taskTitle.trim()) {
       addTask({
@@ -21,7 +23,7 @@ export default function NewTask() {
         completed: false,
         dueDate: dueDate || undefined,
         isImportant: false,
-        listId: "default" // You may want to get this from context or props
+        listId: currentWorkspaceId
       });
       navigate('/');
     }

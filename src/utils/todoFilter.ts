@@ -1,6 +1,10 @@
 import type { Task } from "../stores/todoStore";
 
 export default class TodoFilter {
+  static byWorkspaceId(tasks: Task[], workspaceId: string): Task[] {
+    return tasks.filter(task => workspaceId === task.listId);
+  }
+
   /**
    * Filters tasks that are overdue (past their due date and not completed)
    * 
