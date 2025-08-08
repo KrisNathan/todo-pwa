@@ -4,6 +4,9 @@ import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
 import { mnemonicToSeedSync } from '@scure/bip39';
 import { HDKey } from '@scure/bip32';
+import { persist, createJSONStorage } from 'zustand/middleware';
+import type { StateStorage } from 'zustand/middleware';
+import { get as idbGet, set as idbSet, del as idbDel } from 'idb-keyval';
 // import { decryptJson, encryptJson } from '../utils/crypto';
 
 // Small helper to hex-encode Uint8Array
@@ -24,6 +27,13 @@ const deriveKeysFromMnemonic = (mnemonic: string) => {
   };
 };
 
+// IndexedDB-backed storage for zustand/persist (stores JSON strings)
+const idbStorage: StateStorage = {
+  getItem: async (name) => (await idbGet<string | null>(name)) ?? null,
+  setItem: async (name, value) => { await idbSet(name, value); },
+  removeItem: async (name) => { await idbDel(name); },
+};
+
 type State = {
   syncCode?: string;
   deviceName?: string;
@@ -37,53 +47,62 @@ type Actions = {
   setDeviceName: (name: string) => void;
 }
 
-const useCodeStore = create<State & Actions>()(immer((set) => ({
-  syncCode: undefined,
-  deviceName: undefined,
+const useCodeStore = create<State & Actions>()(
+  persist(
+    immer((set) => ({
+      syncCode: undefined,
+      deviceName: undefined,
 
-  generateSyncCode: () => {
-    // Generate a random sync code (24 words)
-    const code = generateMnemonic(wordlist, 256);
+      generateSyncCode: () => {
+        // Generate a random sync code (24 words)
+        const code = generateMnemonic(wordlist, 256);
 
-    const { privateKey, publicKey } = deriveKeysFromMnemonic(code);
+        const { privateKey, publicKey } = deriveKeysFromMnemonic(code);
 
-    set((state) => {
-      state.syncCode = code;
+        set((state) => {
+          state.syncCode = code;
 
-      state.privateKey = privateKey;
-      state.publicKey = publicKey;
+          state.privateKey = privateKey;
+          state.publicKey = publicKey;
 
-      // const testJson = JSON.stringify({
-      //   tasks: [
-      //     { name: "amogus" },
-      //   ]
-      // });
+          // const testJson = JSON.stringify({
+          //   tasks: [
+          //     { name: "amogus" },
+          //   ]
+          // });
 
-      // (async () => {
-      //   const encrypted = await encryptJson(testJson, privateKey, publicKey);
-      //   const decrypted = await decryptJson(encrypted, privateKey);
-      //   console.log(encrypted);
-      //   console.log(decrypted);
-      // })();
-    });
+          // (async () => {
+          //   const encrypted = await encryptJson(testJson, privateKey, publicKey);
+          //   const decrypted = await decryptJson(encrypted, privateKey);
+          //   console.log(encrypted);
+          //   console.log(decrypted);
+          // })();
+        });
 
-    return code;
-  },
-  setSyncCode: (code) => set((state) => {
-    state.syncCode = code;
-    try {
-      const { privateKey, publicKey } = deriveKeysFromMnemonic(code);
-      state.privateKey = privateKey;
-      state.publicKey = publicKey;
-    } catch {
-      // If invalid mnemonic, leave keys undefined
-      state.privateKey = undefined;
-      state.publicKey = undefined;
+        return code;
+      },
+      setSyncCode: (code) => set((state) => {
+        state.syncCode = code;
+        try {
+          const { privateKey, publicKey } = deriveKeysFromMnemonic(code);
+          state.privateKey = privateKey;
+          state.publicKey = publicKey;
+        } catch {
+          // If invalid mnemonic, leave keys undefined
+          state.privateKey = undefined;
+          state.publicKey = undefined;
+        }
+      }),
+      setDeviceName: (name) => set((state) => {
+        state.deviceName = name;
+      }),
+    })),
+    {
+      name: 'code-store',
+      version: 1,
+      storage: createJSONStorage(() => idbStorage),
     }
-  }),
-  setDeviceName: (name) => set((state) => {
-    state.deviceName = name;
-  }),
-})));
+  )
+);
 
 export default useCodeStore;
