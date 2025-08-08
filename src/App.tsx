@@ -15,6 +15,8 @@ import EditTask from './pages/dialogs/edit_task/EditTask'
 import DeleteTask from './pages/dialogs/delete_task/DeleteTask'
 
 import NewWorkspace from './pages/dialogs/new_workspace/NewWorkspace'
+import DeleteWorkspace from './pages/dialogs/delete_workspace/DeleteWorkspace'
+import RenameWorkspace from './pages/dialogs/rename_workspace/RenameWorkspace'
 
 function App() {
   return (
@@ -37,6 +39,8 @@ function App() {
           <Route path='/task/delete/:taskId' element={<DeleteTask />} />
 
           <Route path='/workspace/new' element={<NewWorkspace />} />
+          <Route path='/workspace/:workspaceId/delete' element={<DeleteWorkspace />} />
+          <Route path='/workspace/:workspaceId/rename' element={<RenameWorkspace />} />
         </Route>
       </Routes>
     </Router>

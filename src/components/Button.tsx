@@ -1,15 +1,15 @@
 import { useBatterySaver } from '../hooks/useBatterySaver';
 
-type Variant = "primary" | "secondary" | "text" | "danger";
+export type ButtonVariant = "primary" | "secondary" | "text" | "danger";
 interface ButtonProps {
   children?: React.ReactNode;
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   className?: string;
-  variant?: Variant;
+  variant?: ButtonVariant;
   disabled?: boolean;
 }
 
-const getVariantClass = (variant: Variant) => {
+const getVariantClass = (variant: ButtonVariant) => {
   switch (variant) {
     case "primary":
       return "bg-primary hover:bg-primary-hover";

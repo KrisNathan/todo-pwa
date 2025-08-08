@@ -7,6 +7,7 @@ import useTodoStore from "../stores/todoStore";
 import { useMemo } from "react";
 import TaskCard from "../components/TaskCard";
 import TodoFilter from "../utils/todoFilter";
+import WorkspaceEditDropdown from "../components/dropdown/WorkspaceEditDropdown";
 
 export default function HomePage() {
   const navigate = useNavigate();
@@ -39,7 +40,10 @@ export default function HomePage() {
 
   return (
     <div className="flex flex-col w-full h-full gap-4">
-      <WorkspaceDropdown />
+      <div className="flex flex-row w-full gap-2">
+        <WorkspaceDropdown />
+        <WorkspaceEditDropdown />
+      </div>
       {tasks.length == 0 ?
         <CenteredMessage icon='😴' message="No tasks yet!" />
         :
