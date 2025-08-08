@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import Button from "../Button";
 import DropdownSelect from "./DropdownSelect";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MdPlaylistAdd } from "react-icons/md";
 import useTodoStore from "../../stores/todoStore";
 
@@ -20,6 +20,17 @@ export default function WorkspaceDropdown() {
 
   const currentWorkspaceId = useTodoStore(state => state.currentWorkspaceId);
   const setCurrentWorkspaceId = useTodoStore(state => state.setCurrentWorkspaceId);
+  const workspaces = useTodoStore(state => state.workspaces);
+  const getWorkspaceById = useTodoStore(state => state.getWorkspaceById);
+
+  useEffect(() => {
+    if (!getWorkspaceById(currentWorkspaceId)) {
+      const firstWorkspace = workspaces[0];
+      if (firstWorkspace) {
+        setCurrentWorkspaceId(firstWorkspace.id);
+      }
+    }
+  }, [workspaces, getWorkspaceById, currentWorkspaceId, setCurrentWorkspaceId])
 
   const onSelect = (value: string | number) => {
     setCurrentWorkspaceId(value as string);
@@ -29,8 +40,6 @@ export default function WorkspaceDropdown() {
     navigate("/workspace/new");
     closeDropdown();
   }
-
-  const workspaces = useTodoStore(state => state.workspaces);
 
   return (
     <DropdownSelect
