@@ -48,6 +48,7 @@ export default function DeleteWorkspace() {
       </div>
 
       <div className="typography-large">Are you sure you wish to delete workspace '{workspace.name}'?</div>
+      <div className="typography-regular text-red">All tasks in this workspace will also be removed.</div>
       <div className="typography-regular text-red">This action cannot be reverted!</div>
 
       <div className="flex-1"></div>
