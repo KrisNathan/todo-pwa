@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import Button from "../Button";
-import Dropdown from "./Dropdown";
+import DropdownSelect from "./DropdownSelect";
 import { useState } from "react";
 import { MdPlaylistAdd } from "react-icons/md";
 import useTodoStore from "../../stores/todoStore";
@@ -33,7 +33,7 @@ export default function WorkspaceDropdown() {
   const workspaces = useTodoStore(state => state.workspaces);
 
   return (
-    <Dropdown
+    <DropdownSelect
       selectedValue={currentWorkspaceId}
       options={workspaces.map(workspace => ({
         value: workspace.id,
@@ -57,6 +57,6 @@ export default function WorkspaceDropdown() {
           <MdPlaylistAdd size={24} color='var(--fun-color-text-secondary)' />
         </div>
       </Button>
-    </Dropdown>
+    </DropdownSelect>
   )
 }

@@ -2,14 +2,14 @@ import { MdArrowDropDown } from "react-icons/md";
 import Button from "../Button";
 import { useMemo, useRef } from "react";
 
-export interface DropdownOption {
+export interface DropdownSelectOption {
   label: string;
   value: string | number;
 }
 
-interface DropdownProps {
+interface DropdownSelectProps {
   selectedValue?: string | number;
-  options: DropdownOption[];
+  options: DropdownSelectOption[];
   isOpen?: boolean;
   onOpen?: () => void;
   onClose?: () => void;
@@ -18,7 +18,7 @@ interface DropdownProps {
   children?: React.ReactNode
 }
 
-export default function Dropdown({ selectedValue, options, isOpen, onOpen, onClose, onSelect, className, children }: DropdownProps) {
+export default function DropdownSelect({ selectedValue, options, isOpen, onOpen, onClose, onSelect, className, children }: DropdownSelectProps) {
   const findOptionByValue = (value: string | number) => {
     return options.find(option => option.value === value) || options[0];
   };
