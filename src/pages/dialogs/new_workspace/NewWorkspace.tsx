@@ -33,7 +33,7 @@ export default function NewWorkspace() {
   return (
     <FullScreenModal className="flex flex-col gap-4 p-4 bg-background">
       <div className="flex flex-row gap-2">
-        <div className="typography-regular flex-1">New Task</div>
+        <div className="typography-regular flex-1">New Workspace</div>
         <Button variant="text" className="text-red" onClick={() => navigate('/')}>Cancel</Button>
       </div>
 
