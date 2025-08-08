@@ -23,7 +23,7 @@ export default function Switch({
     const newChecked = !isChecked;
     setIsChecked(newChecked);
     if (!isBatterySaverMode && 'vibrate' in navigator) {
-      navigator.vibrate(25);
+      navigator.vibrate(40);
     }
     onChange?.(newChecked);
   };

@@ -26,7 +26,7 @@ export default function IconButton({ children, onClick, className, variant = "pr
   const onClickHandler = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
     if (!isBatterySaverMode && 'vibrate' in navigator) {
-      navigator.vibrate(25);
+      navigator.vibrate(40);
     }
     onClick?.(event);
   };

@@ -34,7 +34,7 @@ export default function Button({ children, onClick, className, variant = "primar
     
     // Only vibrate if not in battery saver mode and vibration is supported
     if (!isBatterySaverMode && 'vibrate' in navigator) {
-      navigator.vibrate(25);
+      navigator.vibrate(40);
     }
     
     onClick?.(event);
