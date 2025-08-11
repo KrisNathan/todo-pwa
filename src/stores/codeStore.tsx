@@ -7,7 +7,7 @@ import { HDKey } from '@scure/bip32';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import type { StateStorage } from 'zustand/middleware';
 import { get as idbGet, set as idbSet, del as idbDel } from 'idb-keyval';
-// import { decryptJson, encryptJson } from '../utils/crypto';
+import { encryptJson, decryptJson } from '../utils/crypto';
 
 // Small helper to hex-encode Uint8Array
 const bytesToHex = (bytes: Uint8Array) => [...bytes].map(b => b.toString(16).padStart(2, '0')).join('');
@@ -65,18 +65,19 @@ const useCodeStore = create<State & Actions>()(
           state.privateKey = privateKey;
           state.publicKey = publicKey;
 
-          // const testJson = JSON.stringify({
-          //   tasks: [
-          //     { name: "amogus" },
-          //   ]
-          // });
+          const testJson = {
+            tasks: [
+              { name: "amogus" },
+            ]
+          };
 
-          // (async () => {
-          //   const encrypted = await encryptJson(testJson, privateKey, publicKey);
-          //   const decrypted = await decryptJson(encrypted, privateKey);
-          //   console.log(encrypted);
-          //   console.log(decrypted);
-          // })();
+          (async () => {
+            console.log("Testing encryption/decryption with ECDSA signatures...");
+            const encrypted = await encryptJson(testJson, privateKey);
+            const decrypted = await decryptJson(encrypted, privateKey, publicKey);
+            console.log('Encrypted:', encrypted);
+            console.log('Decrypted:', decrypted);
+          })();
         });
 
         return code;
