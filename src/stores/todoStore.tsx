@@ -113,6 +113,12 @@ const useTodoStore = create<State & Actions>()(
       }),
 
       removeWorkspace: (listId) => set((state) => {
+        // Prevent removing the default workspace
+        if (listId === state.defaultWorkspaceId) {
+          console.warn("Cannot remove the default workspace");
+          return;
+        }
+        
         state.workspaces = state.workspaces.filter(list => list.id !== listId);
         state.tasks = state.tasks.filter(task => task.listId !== listId);
         // If current workspace is removed, fall back to default
