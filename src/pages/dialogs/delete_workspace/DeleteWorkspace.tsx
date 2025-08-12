@@ -1,5 +1,5 @@
 import { Navigate, useNavigate, useParams } from "react-router-dom";
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect, useCallback } from "react";
 import Button from "../../../components/Button";
 import FullScreenModal from "../../../components/modal/FullScreenModal";
 import useTodoStore from "../../../stores/todoStore";
@@ -28,16 +28,18 @@ export default function DeleteWorkspace() {
       return () => clearTimeout(timer);
     }
   }, [countdown]);
+  
+  const handleDeleteWorkspace = useCallback(() => {
+    if (!workspaceId) return;
+
+    deleteWorkspace(workspaceId);
+    navigate('/');
+  }, [workspaceId, deleteWorkspace, navigate]);
 
   if (!workspaceId || !workspace || defaultWorkspaceId === workspaceId) {
     return (
       <Navigate to='/' />
     )
-  }
-
-  const handleDeleteWorkspace = () => {
-    deleteWorkspace(workspaceId);
-    navigate('/');
   }
 
   return (

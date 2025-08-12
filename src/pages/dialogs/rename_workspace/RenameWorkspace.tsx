@@ -1,5 +1,5 @@
 import { Navigate, useNavigate, useParams } from "react-router-dom";
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import Button from "../../../components/Button";
 import FullScreenModal from "../../../components/modal/FullScreenModal";
 import TextBox from "../../../components/textbox/TextBox";
@@ -20,24 +20,27 @@ export default function RenameWorkspace() {
   const navigate = useNavigate();
   const [workspaceName, setWorkspaceName] = useState(workspace?.name || "");
 
-   const isValid = useMemo(
+  const isValid = useMemo(
     () =>
       0 < workspaceName.trim().length &&
       undefined === findWorkspaceByName(workspaceName),
     [workspaceName, findWorkspaceByName]
   );
 
-  if (!workspaceId || !workspace) {
-    return (
-      <Navigate to='/' />
-    )
-  }
+  const handleRenameWorkspace = useCallback(() => {
+    if (!workspaceId) return;
 
-  const handleRenameWorkspace = () => {
     updateWorkspace(workspaceId, {
       name: workspaceName.trim(),
     });
     navigate('/');
+  }, [workspaceId, workspaceName, updateWorkspace, navigate]);
+
+
+  if (!workspaceId || !workspace) {
+    return (
+      <Navigate to='/' />
+    )
   }
 
   return (

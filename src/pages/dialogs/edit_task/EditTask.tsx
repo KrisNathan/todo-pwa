@@ -1,5 +1,5 @@
 import { Navigate, useNavigate, useParams } from "react-router-dom";
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import Button from "../../../components/Button";
 import FullScreenModal from "../../../components/modal/FullScreenModal";
 import TextBox from "../../../components/textbox/TextBox";
@@ -21,18 +21,21 @@ export default function EditTask() {
   const [taskTitle, setTaskTitle] = useState(task?.title || "");
   const [dueDate, setDueDate] = useState<Date | null>(task?.dueDate || null);
 
-  if (!taskId || !task) {
-    return (
-      <Navigate to='/' />
-    )
-  }
+  const handleEditTask = useCallback(() => {
+    if (!taskId) return;
 
-  const handleEditTask = () => {
     updateTask(taskId, {
       title: taskTitle.trim(),
       dueDate: dueDate || undefined,
     });
     navigate('/');
+  }, [taskId, taskTitle, dueDate, updateTask, navigate]);
+
+
+  if (!taskId || !task) {
+    return (
+      <Navigate to='/' />
+    )
   }
 
   return (

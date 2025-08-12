@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
 import Button from "../../../components/Button";
 import FullScreenModal from "../../../components/modal/FullScreenModal";
 import TextBox from "../../../components/textbox/TextBox";
@@ -18,7 +18,8 @@ export default function NewWorkspace() {
     [workspaceName, findWorkspaceByName]
   );
 
-  const handleCreateWorkspace = () => {
+
+  const handleCreateWorkspace = useCallback(() => {
     if (workspaceName.trim()) {
       addWorkspace({
         name: workspaceName.trim(),
@@ -28,7 +29,7 @@ export default function NewWorkspace() {
     }
 
     navigate('/');
-  };
+  }, [workspaceName, addWorkspace, navigate]);
 
   return (
     <FullScreenModal className="flex flex-col gap-4 p-4 bg-background">

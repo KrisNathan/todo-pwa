@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
 import Button from "../../../components/Button";
 import FullScreenModal from "../../../components/modal/FullScreenModal";
 import TextBox from "../../../components/textbox/TextBox";
@@ -16,7 +16,7 @@ export default function NewTask() {
 
   const currentWorkspaceId = useTodoStore((state) => state.currentWorkspaceId);
 
-  const handleCreateTask = () => {
+  const handleCreateTask = useCallback(() => {
     if (taskTitle.trim()) {
       addTask({
         title: taskTitle.trim(),
@@ -27,7 +27,7 @@ export default function NewTask() {
       });
       navigate('/');
     }
-  };
+  }, [taskTitle, dueDate, addTask, navigate, currentWorkspaceId]);
 
   return (
     <FullScreenModal className="flex flex-col gap-4 p-4 bg-background">

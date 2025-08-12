@@ -1,7 +1,7 @@
 import { MdCheckBox, MdCheckBoxOutlineBlank, MdDelete, MdEdit } from "react-icons/md";
 import type { Task } from "../stores/todoStore";
 import ContextMenu from "./ContextMenu";
-import { useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import useTodoStore from "../stores/todoStore";
 import { useNavigate } from "react-router-dom";
 
@@ -17,10 +17,10 @@ export default function TaskCard({ task }: TaskCardProps) {
 
   const { updateTask } = useTodoStore();
 
-  const toggleCompletion = () => {
+  const toggleCompletion = useCallback(() => {
     navigator.vibrate(50);
     updateTask(task.id, { completed: !task.completed });
-  };
+  }, [task.id, task.completed, updateTask]);
 
   const handleContextMenu = (e: React.MouseEvent) => {
     e.preventDefault();

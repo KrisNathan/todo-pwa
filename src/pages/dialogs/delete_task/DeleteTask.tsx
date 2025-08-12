@@ -1,5 +1,5 @@
 import { Navigate, useNavigate, useParams } from "react-router-dom";
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect, useCallback } from "react";
 import Button from "../../../components/Button";
 import FullScreenModal from "../../../components/modal/FullScreenModal";
 import useTodoStore from "../../../stores/todoStore";
@@ -28,15 +28,17 @@ export default function DeleteTask() {
     }
   }, [countdown]);
 
+  const handleDeleteTask = useCallback(() => {
+    if (!taskId) return;
+
+    deleteTask(taskId);
+    navigate('/');
+  }, [taskId, deleteTask, navigate]);
+
   if (!taskId || !task) {
     return (
       <Navigate to='/' />
     )
-  }
-
-  const handleDeleteTask = () => {
-    deleteTask(taskId);
-    navigate('/');
   }
 
   return (
