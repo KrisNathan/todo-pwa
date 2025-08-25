@@ -1,4 +1,4 @@
-import type { Task } from "../stores/todoStore";
+import type { Task } from "../interfaces/task";
 
 export default class TodoFilter {
   static byWorkspaceId(tasks: Task[], workspaceId: string): Task[] {

@@ -21,7 +21,7 @@ export default function NewTask() {
       addTask({
         title: taskTitle.trim(),
         completed: false,
-        dueDate: dueDate || undefined,
+        dueDate: dueDate || null,
         isImportant: false,
         listId: currentWorkspaceId
       });

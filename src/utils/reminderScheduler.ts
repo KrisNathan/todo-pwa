@@ -1,5 +1,9 @@
-import useTodoStore, { type Task } from "../stores/todoStore";
-import { ensureNotificationPermission, showNotification } from "./notifications";
+import useTodoStore from "../stores/todoStore";
+import type { Task } from "../interfaces/task";
+import {
+  ensureNotificationPermission,
+  showNotification,
+} from "./notifications";
 
 type Timer = {
   id: number;
@@ -41,7 +45,10 @@ function scheduleForTask(task: Task) {
       const due = task.dueDate!;
       await ensureNotificationPermission();
       await showNotification("Task due soon", {
-        body: `"${task.title}" is due at ${due.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`,
+        body: `"${task.title}" is due at ${due.toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        })}`,
         tag: key, // dedupe by tag at the OS level
         data: { taskId: task.id, type: "pre" },
         icon: "/pwa-192x192.png",
@@ -67,7 +74,10 @@ function scheduleForTask(task: Task) {
 
     await ensureNotificationPermission();
     await showNotification("Task due soon", {
-  body: `"${latest.title}" is due at ${latest.dueDate?.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`,
+      body: `"${latest.title}" is due at ${latest.dueDate?.toLocaleTimeString(
+        [],
+        { hour: "2-digit", minute: "2-digit" }
+      )}`,
       tag: firedKey,
       data: { taskId: latest.id, type: "pre" },
       icon: "/pwa-192x192.png",

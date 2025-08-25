@@ -17,6 +17,7 @@
     "@scure/bip32": "^1.7.0",
     "@scure/bip39": "^1.6.0",
     "@tailwindcss/vite": "^4.1.11",
+    "idb": "^8.0.3",
     "idb-keyval": "^6.2.2",
     "immer": "^10.1.1",
     "react": "^19.1.0",

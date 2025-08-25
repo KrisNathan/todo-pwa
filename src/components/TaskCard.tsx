@@ -1,5 +1,5 @@
 import { MdCheckBox, MdCheckBoxOutlineBlank, MdDelete, MdEdit } from "react-icons/md";
-import type { Task } from "../stores/todoStore";
+import type { Task } from "../interfaces/task";
 import ContextMenu from "./ContextMenu";
 import { useCallback, useRef, useState } from "react";
 import useTodoStore from "../stores/todoStore";
