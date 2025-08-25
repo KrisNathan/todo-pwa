@@ -5,6 +5,7 @@ import { MdDarkMode, MdHdrAuto, MdLightMode } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import useCodeStore from "../stores/codeStore";
 import useInstallStore from "../stores/installStore";
+import { ensureNotificationPermission } from "../utils/notifications";
 
 export default function SettingsPage() {
   const navigate = useNavigate();
@@ -27,6 +28,23 @@ export default function SettingsPage() {
   return (
     <div className="flex flex-col w-full h-full gap-4 select-none">
       <div>WORK IN PROGRESS</div>
+      <div className="flex flex-col gap-2">
+        <h1 className="typography-large">Notifications</h1>
+        <div className="typography-small text-text-secondary">
+          Get a notification 1 hour before a task is due. Works offline on this device.
+        </div>
+        <Button
+          className="w-full"
+          variant="secondary"
+          onClick={async () => {
+            const perm = await ensureNotificationPermission();
+            alert(perm === 'granted' ? 'Notifications enabled' : 'Permission was not granted');
+          }}
+        >
+          Enable Notifications
+        </Button>
+      </div>
+
 
       <div className="flex flex-col gap-2">
         <h1 className="typography-large">Install</h1>

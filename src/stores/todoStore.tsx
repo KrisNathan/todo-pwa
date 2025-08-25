@@ -48,6 +48,8 @@ type State = {
   workspaces: Workspace[];
   defaultWorkspaceId: string;
   currentWorkspaceId: string;
+  // Keys of reminders we've already shown to avoid duplicate notifications across reloads
+  notifiedReminderKeys: string[];
 }
 
 type Actions = {
@@ -64,6 +66,11 @@ type Actions = {
   getWorkspaceByName: (name: string) => Workspace | undefined;
 
   setCurrentWorkspaceId: (workspaceId: string) => void;
+
+  // Reminder tracking helpers
+  hasReminderBeenNotified: (key: string) => boolean;
+  markReminderNotified: (key: string) => void;
+  clearReminderForTask: (taskId: string) => void;
 }
 
 const defaultWorkspaceId = crypto.randomUUID();
@@ -78,6 +85,7 @@ const useTodoStore = create<State & Actions>()(
       }],
       defaultWorkspaceId,
       currentWorkspaceId: defaultWorkspaceId,
+  notifiedReminderKeys: [],
 
       addTask: (task, taskIdOverride) => set((state) => {
         const newTask: Task = {
@@ -89,12 +97,21 @@ const useTodoStore = create<State & Actions>()(
 
       removeTask: (taskId) => set((state) => {
         state.tasks = state.tasks.filter(task => task.id !== taskId);
+        state.notifiedReminderKeys = state.notifiedReminderKeys.filter(k => !k.startsWith(`${taskId}:`));
       }),
 
       updateTask: (taskId, updates) => set((state) => {
         const task = state.tasks.find(task => task.id === taskId);
         if (task) {
+          const beforeDue = task.dueDate?.getTime();
           Object.assign(task, updates);
+          const afterDue = task.dueDate?.getTime();
+          // If due date changed or task toggled completed, clear reminder state
+          const dueChanged = beforeDue !== afterDue;
+          const completedChanged = typeof updates.completed === 'boolean';
+          if (dueChanged || completedChanged) {
+            state.notifiedReminderKeys = state.notifiedReminderKeys.filter(k => !k.startsWith(`${taskId}:`));
+          }
         }
       }),
 
@@ -149,6 +166,19 @@ const useTodoStore = create<State & Actions>()(
         } else {
           console.warn(`Workspace with ID ${workspaceId} does not exist`);
         }
+      }),
+
+      hasReminderBeenNotified: (key: string) => {
+        const state = get();
+        return state.notifiedReminderKeys.includes(key);
+      },
+      markReminderNotified: (key: string) => set((state) => {
+        if (!state.notifiedReminderKeys.includes(key)) {
+          state.notifiedReminderKeys.push(key);
+        }
+      }),
+      clearReminderForTask: (taskId: string) => set((state) => {
+        state.notifiedReminderKeys = state.notifiedReminderKeys.filter(k => !k.startsWith(`${taskId}:`));
       }),
     })),
     {

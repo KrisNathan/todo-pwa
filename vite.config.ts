@@ -10,6 +10,7 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: "autoUpdate",
+      injectRegister: "auto",
       manifest: {
         name: "To Do",
         short_name: "To Do",
@@ -33,6 +34,7 @@ export default defineConfig({
         scope: "/",
       },
       workbox: {
+        importScripts: ["/sw-custom.js"],
         globPatterns: ["**/*.{js,css,html,png,jpg,svg}"],
         runtimeCaching: [
           {
