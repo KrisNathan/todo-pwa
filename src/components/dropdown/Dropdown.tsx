@@ -21,7 +21,7 @@ export default function Dropdown({ children, label, isOpen, onOpen, onClose, cla
   const onCloseHandler = async () => {
     if (!isOpen) return;
     dropdownDivRef.current?.classList.add("animate-(--anim-exit-slide-up)");
-    await new Promise(resolve => setTimeout(resolve, 300)); // Match the duration of the slide-up animation
+    await new Promise(resolve => setTimeout(resolve, 400)); // 100ms longer than anim duration to prevent flicker
     if (dropdownDivRef.current) {
       dropdownDivRef.current.classList.remove("animate-(--anim-exit-slide-up)");
     }
