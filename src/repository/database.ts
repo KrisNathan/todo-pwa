@@ -24,6 +24,9 @@ export default class Database {
         if (!db.objectStoreNames.contains("workspaces")) {
           db.createObjectStore("workspaces", { keyPath: "id" });
         }
+        if (!db.objectStoreNames.contains("settings")) {
+          db.createObjectStore("settings", { keyPath: "key" });
+        }
       },
     });
     return new Database(db);
@@ -34,6 +37,16 @@ export default class Database {
   }
   async getAllWorkspaces(): Promise<Workspace[]> {
     return await this.db.getAll("workspaces");
+  }
+
+  async getCurrentWorkspaceId(): Promise<string | null> {
+    const setting = await this.db.get("settings", "currentWorkspaceId");
+    return setting ? setting.value : null;
+  }
+  async setCurrentWorkspaceId(id: string) {
+    const tx = this.db.transaction("settings", "readwrite");
+    await tx.store.put({ key: "currentWorkspaceId", value: id });
+    await tx.done;
   }
 
   async addTask(task: Task) {

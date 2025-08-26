@@ -137,6 +137,8 @@ const useTodoStore = create<State & Actions>()(
     setCurrentWorkspaceId: (workspaceId: string) => set((state) => {
       if (state.workspaces.some(list => list.id === workspaceId)) {
         state.currentWorkspaceId = workspaceId;
+
+        void getDB().then((db) => db.setCurrentWorkspaceId(workspaceId)).catch(console.error);
       } else {
         console.warn(`Workspace with ID ${workspaceId} does not exist`);
       }
@@ -157,6 +159,7 @@ const useTodoStore = create<State & Actions>()(
 
     init: async () => {
       const db = await getDB();
+      
       const [tasksFromDb, workspacesFromDb] = await Promise.all([
         db.getAllTasks(),
         db.getAllWorkspaces(),
@@ -178,6 +181,7 @@ const useTodoStore = create<State & Actions>()(
         });
       }
 
+      // Initialize workspaces
       let workspaces = workspacesFromDb.slice();
       if (workspaces.length === 0) {
         const defaultWs: Workspace = { id: defaultWorkspaceId, name: 'Default' };
@@ -190,14 +194,22 @@ const useTodoStore = create<State & Actions>()(
       const defaultWs = workspaces.find(w => w.name.toLowerCase() === 'default') ?? workspaces[0];
       const nextDefaultId = defaultWs.id;
 
+      // Load currentWorkspaceId from DB and validate
+      let currentWorkspaceId = await db.getCurrentWorkspaceId();
+      if (!currentWorkspaceId) {
+        currentWorkspaceId = nextDefaultId;
+      }
+      if (!workspaces.some(w => w.id === currentWorkspaceId)) {
+        void getDB().then((db) => db.setCurrentWorkspaceId(nextDefaultId)).catch(console.error);
+        currentWorkspaceId = nextDefaultId;
+      }
+      
+
       set((state) => {
         state.tasks = tasks;
         state.workspaces = workspaces;
         state.defaultWorkspaceId = nextDefaultId;
-        // If current is missing, set to default
-        if (!workspaces.some(w => w.id === state.currentWorkspaceId)) {
-          state.currentWorkspaceId = nextDefaultId;
-        }
+        state.currentWorkspaceId = currentWorkspaceId;
         state.hydrated = true;
       });
     },
