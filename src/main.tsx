@@ -7,6 +7,7 @@ import InstallContext from './components/InstallContext.tsx'
 import { startReminderScheduler } from './utils/reminderScheduler'
 import useTodoStore from './stores/todoStore'
 import SyncUtils from './utils/sync'
+import useCodeStore from './stores/codeStore.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -22,6 +23,14 @@ queueMicrotask(() => startReminderScheduler());
 queueMicrotask(async () => {
   await useTodoStore.getState().init();
   // initial sync after store is ready here
+
+  const codeStore = useCodeStore.getState();
+
+  // Sync is disabled
+  if (!codeStore.syncCode) {
+    return;
+  }
+
   try {
     const sync = new SyncUtils();
 
@@ -55,7 +64,6 @@ queueMicrotask(async () => {
       await queueSync(() => sync.push()).catch(console.error);
     }
 
-    // 2) Subscribe to store updates and push on changes (debounced)
     const signature = () => {
       const s = useTodoStore.getState();
       // Keep only relevant fields for sync
@@ -86,6 +94,7 @@ queueMicrotask(async () => {
         debouncedPush();
       }
     });
+    
 
     const debouncedPull = debounce<void[]>(() => {
       if (!useTodoStore.getState().hydrated) return;
