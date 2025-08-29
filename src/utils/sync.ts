@@ -37,7 +37,7 @@ const SerializedTaskSchema = z
     listId: z.string().catch(""),
     // Accept ISO strings or null; normalize undefined/empty to null
     dueDate: z
-  .preprocess((v: unknown) => {
+      .preprocess((v: unknown) => {
         if (v === undefined || v === null || v === "") return null;
         if (typeof v === "string") return v;
         return null;
@@ -61,7 +61,7 @@ const EncryptedPayloadSchema: z.ZodType<EncryptedPayload> = z
   .strip();
 
 export default class SyncUtils {
-  constructor() {}
+  constructor() { }
 
   private getKeys() {
     const { publicKey, privateKey } = useCodeStore.getState();
@@ -114,44 +114,44 @@ export default class SyncUtils {
       }
     }
 
-  // 2) Do NOT remove local workspaces missing from remote (local retains extras)
+    // 2) Do NOT remove local workspaces missing from remote (local retains extras)
 
     // 3) Upsert tasks from remote
-    for (const rt of remote.tasks) {
-      const lt = localTasksById.get(rt.id);
-      const due = rt.dueDate ? new Date(rt.dueDate) : null;
-      if (!lt) {
+    for (const remoteTask of remote.tasks) {
+      const localTask = localTasksById.get(remoteTask.id);
+      const due = remoteTask.dueDate ? new Date(remoteTask.dueDate) : null;
+      if (!localTask) {
         useTodoStore.getState().addTask(
           {
-            title: rt.title,
-            completed: rt.completed,
-            isImportant: rt.isImportant,
-            listId: rt.listId,
+            title: remoteTask.title,
+            completed: remoteTask.completed,
+            isImportant: remoteTask.isImportant,
+            listId: remoteTask.listId,
             dueDate: due,
           },
-          rt.id
+          remoteTask.id
         );
       } else {
         // Update if any field differs
         const differs =
-          lt.title !== rt.title ||
-          lt.completed !== rt.completed ||
-          lt.isImportant !== rt.isImportant ||
-          lt.listId !== rt.listId ||
-          ((lt.dueDate?.getTime() ?? -1) !== (due ? due.getTime() : -1));
+          localTask.title !== remoteTask.title ||
+          localTask.completed !== remoteTask.completed ||
+          localTask.isImportant !== remoteTask.isImportant ||
+          localTask.listId !== remoteTask.listId ||
+          ((localTask.dueDate?.getTime() ?? -1) !== (due ? due.getTime() : -1));
         if (differs) {
-          useTodoStore.getState().updateTask(rt.id, {
-            title: rt.title,
-            completed: rt.completed,
-            isImportant: rt.isImportant,
-            listId: rt.listId,
+          useTodoStore.getState().updateTask(remoteTask.id, {
+            title: remoteTask.title,
+            completed: remoteTask.completed,
+            isImportant: remoteTask.isImportant,
+            listId: remoteTask.listId,
             dueDate: due,
           });
         }
       }
     }
 
-  // 4) Do NOT remove local tasks missing from remote (local retains extras)
+    // 4) Do NOT remove local tasks missing from remote (local retains extras)
   }
 
   async pull(): Promise<"ok" | "not-found"> {
