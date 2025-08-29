@@ -5,6 +5,7 @@ import { useMemo } from "react";
 import useCodeStore from "../../../stores/codeStore";
 
 export default function SyncSetupNewChain() {
+  const navigate = useNavigate();
   const { syncCode, generateSyncCode } = useCodeStore();
   useMemo(() => {
     if (!syncCode) {
@@ -13,7 +14,6 @@ export default function SyncSetupNewChain() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [syncCode]);
 
-  const navigate = useNavigate();
   return (
     <FullScreenModal className="flex flex-col gap-4 p-4 bg-background">
       <div className="flex flex-row gap-2">
@@ -37,7 +37,9 @@ export default function SyncSetupNewChain() {
       <div className="flex-1"></div>
       <div className="flex flex-row gap-2">
         <Button variant="secondary" className="flex-1 !text-center" onClick={() => navigate("/sync_setup")}>Back</Button>
-        <Button variant="primary" className="flex-1 !text-center">Done</Button>
+        <Button variant="primary" className="flex-1 !text-center" onClick={() => {
+          navigate("/settings");
+        }}>Done</Button>
       </div>
     </FullScreenModal>
   )

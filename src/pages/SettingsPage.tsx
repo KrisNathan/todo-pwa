@@ -75,7 +75,7 @@ export default function SettingsPage() {
       <div className="flex flex-col gap-2">
         <div className="typography-regular">Sync Code</div>
         <div className="typography-small text-text-secondary">DO NOT SHARE. Treat this code like a password. If someone gets ahold of it, they can read and modify your synced data.</div>
-        <CodeBox value={syncCode} onChange={setSyncCode} isHidden isCopyable isRandomizable />
+        <CodeBox value={syncCode} onChange={setSyncCode} isHidden isCopyable />
       </div>
 
       <div className="flex flex-col gap-2">
