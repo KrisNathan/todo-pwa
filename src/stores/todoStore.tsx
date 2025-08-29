@@ -4,6 +4,9 @@ import type { Task } from '../interfaces/task';
 import type { Workspace } from '../interfaces/workspace';
 import Database from '../repository/database';
 
+const DEFAULT_WORKSPACE_ID = 'default-workspace-id';
+const DEFAULT_WORKSPACE_NAME = 'Default';
+
 // Local helper to lazily initialize the DB instance
 let dbInstance: Database | null = null;
 const getDB = async () => {
@@ -44,14 +47,13 @@ type Actions = {
   init: () => Promise<void>;
 }
 
-const defaultWorkspaceId = crypto.randomUUID();
 
 const useTodoStore = create<State & Actions>()(
   immer((set, get) => ({
     tasks: [],
-    workspaces: [{ name: 'Default', id: defaultWorkspaceId }],
-    defaultWorkspaceId,
-    currentWorkspaceId: defaultWorkspaceId,
+    workspaces: [{ name: DEFAULT_WORKSPACE_NAME, id: DEFAULT_WORKSPACE_ID }],
+    defaultWorkspaceId: DEFAULT_WORKSPACE_ID,
+    currentWorkspaceId: DEFAULT_WORKSPACE_ID,
     notifiedReminderKeys: [],
     hydrated: false,
 
@@ -184,7 +186,7 @@ const useTodoStore = create<State & Actions>()(
       // Initialize workspaces
       let workspaces = workspacesFromDb.slice();
       if (workspaces.length === 0) {
-        const defaultWs: Workspace = { id: defaultWorkspaceId, name: 'Default' };
+        const defaultWs: Workspace = { id: DEFAULT_WORKSPACE_ID, name: DEFAULT_WORKSPACE_NAME };
         workspaces = [defaultWs];
         // Persist default workspace
         await db.addWorkspace(defaultWs);
