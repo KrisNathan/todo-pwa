@@ -87,7 +87,12 @@ queueMicrotask(async () => {
       }
     });
 
-    // 3) Periodic pull to fetch remote updates (serialized with other sync ops)
+    const debouncedPull = debounce<void[]>(() => {
+      if (!useTodoStore.getState().hydrated) return;
+      if (typeof navigator !== 'undefined' && 'onLine' in navigator && !navigator.onLine) return;
+      void queueSync(() => sync.pull()).catch(() => { });
+    }, 400);
+
     const PULL_INTERVAL_MS = Number(import.meta.env.VITE_SYNC_PULL_INTERVAL_MS ?? 2 * 60 * 1000); // 2 minutes
     const pullTimer = window.setInterval(() => {
       // Only attempt when app is hydrated and online
@@ -96,9 +101,19 @@ queueMicrotask(async () => {
       void queueSync(() => sync.pull()).catch(() => { });
     }, PULL_INTERVAL_MS);
 
+    const onVisibility = () => {
+      if (document.visibilityState === 'visible') debouncedPull();
+    };
+    const onFocus = () => debouncedPull();
+
+    document.addEventListener('visibilitychange', onVisibility);
+    window.addEventListener('focus', onFocus);
+
     // Clean up timer if the page is being closed/refreshed
     window.addEventListener('beforeunload', () => {
       window.clearInterval(pullTimer);
+      document.removeEventListener('visibilitychange', onVisibility);
+      window.removeEventListener('focus', onFocus);
     });
   } catch (e) {
     // Missing keys or network issues shouldn't block app start
