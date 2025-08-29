@@ -179,6 +179,13 @@ export default class SyncUtils {
     const decrypted = await decryptJson(data.data.encryptedString, privateKey, publicKey);
     const payload = this.parsePayload(decrypted);
     await this.mergeRemoteIntoLocal(payload);
+    
+    // After merging, push the merged state back to remote so it reflects the union
+    try {
+      await this.push();
+    } catch (err) {
+      console.warn('[sync] push after merge failed:', err);
+    }
     return "ok";
   }
 
