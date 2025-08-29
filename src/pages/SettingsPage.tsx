@@ -1,4 +1,3 @@
-import { useState } from "react";
 import CodeBox from "../components/textbox/CodeBox";
 import Button from "../components/Button";
 import { MdDarkMode, MdHdrAuto, MdLightMode } from "react-icons/md";
@@ -10,7 +9,7 @@ import { ensureNotificationPermission } from "../utils/notifications";
 export default function SettingsPage() {
   const navigate = useNavigate();
   const { syncCode, setSyncCode } = useCodeStore();
-  const [deviceName, setDeviceName] = useState("My Device");
+  // const [deviceName, setDeviceName] = useState("My Device");
 
   const { isInstalled, deferredPrompt, setDeferredPrompt } = useInstallStore();
 
@@ -28,7 +27,7 @@ export default function SettingsPage() {
   return (
     <div className="flex flex-col w-full h-full gap-4 select-none">
       <div>WORK IN PROGRESS</div>
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-4">
         <h1 className="typography-large">Notifications</h1>
         <div className="typography-small text-text-secondary">
           Get a notification 1 hour before a task is due. Works offline on this device.
@@ -69,19 +68,25 @@ export default function SettingsPage() {
       <div className="flex flex-col gap-2">
         <h1 className="typography-large">Sync</h1>
         <div className="typography-small text-text-secondary">Sync data across devices. Your data is encrypted before transit. Our servers can't see the contents of your data.</div>
-        <Button className="w-full" onClick={() => navigate('/sync_setup')}>Enable Sync</Button>
-      </div>
 
-      <div className="flex flex-col gap-2">
-        <div className="typography-regular">Sync Code</div>
-        <div className="typography-small text-text-secondary">DO NOT SHARE. Treat this code like a password. If someone gets ahold of it, they can read and modify your synced data.</div>
-        <CodeBox value={syncCode} onChange={setSyncCode} isHidden isCopyable />
-      </div>
+        {!syncCode &&
+          <Button className="w-full" onClick={() => navigate('/sync_setup')}>Enable Sync</Button>
+        }
+        {syncCode &&
+          <div className="flex flex-col gap-2">
+            <div className="typography-regular">Sync Code</div>
+            <div className="typography-small text-text-secondary">DO NOT SHARE. Treat this code like a password. If someone gets ahold of it, they can read and modify your synced data.</div>
+            <CodeBox value={syncCode} onChange={setSyncCode} isHidden isCopyable />
 
-      <div className="flex flex-col gap-2">
-        <div className="typography-regular">Device Name</div>
-        <div className="typography-small text-text-secondary">Make sure this is unique among your devices.</div>
-        <CodeBox value={deviceName} onChange={setDeviceName} isEditable />
+            <Button className="w-full" onClick={() => navigate('/sync/exit')}>Exit Sync Chain</Button>
+          </div>
+
+          // <div className="flex flex-col gap-2">
+          //   <div className="typography-regular">Device Name</div>
+          //   <div className="typography-small text-text-secondary">Make sure this is unique among your devices.</div>
+          //   <CodeBox value={deviceName} onChange={setDeviceName} isEditable />
+          // </div>
+        }
       </div>
 
       <div className="flex flex-col gap-2">

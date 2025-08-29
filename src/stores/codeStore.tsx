@@ -45,6 +45,7 @@ type Actions = {
   generateSyncCode: () => string;
   setSyncCode: (code: string) => void;
   setDeviceName: (name: string) => void;
+  exitSyncChain: () => void;
 }
 
 const useCodeStore = create<State & Actions>()(
@@ -96,6 +97,13 @@ const useCodeStore = create<State & Actions>()(
       }),
       setDeviceName: (name) => set((state) => {
         state.deviceName = name;
+      }),
+
+      exitSyncChain: () => set((state) => {
+        state.syncCode = undefined;
+        state.deviceName = undefined;
+        state.privateKey = undefined;
+        state.publicKey = undefined;
       }),
     })),
     {

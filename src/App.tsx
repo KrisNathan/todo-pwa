@@ -17,6 +17,7 @@ import DeleteTask from './pages/dialogs/delete_task/DeleteTask'
 import NewWorkspace from './pages/dialogs/new_workspace/NewWorkspace'
 import DeleteWorkspace from './pages/dialogs/delete_workspace/DeleteWorkspace'
 import RenameWorkspace from './pages/dialogs/rename_workspace/RenameWorkspace'
+import SyncExit from './pages/dialogs/sync_exit/SyncExit'
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
           <Route path='/sync_setup' element={<SyncSetupInitial />} />
           <Route path='/sync_setup/join_chain' element={<SyncSetupJoinChain />} />
           <Route path='/sync_setup/new_chain' element={<SyncSetupNewChain />} />
+          <Route path='/sync/exit' element={<SyncExit />} />
 
           <Route path='/task/new' element={<NewTask />} />
           <Route path='/task/edit/:taskId' element={<EditTask />} />
