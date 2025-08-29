@@ -1,18 +1,41 @@
-import Button from "./Button";
+import { useBatterySaver } from "../hooks/useBatterySaver";
 
+type Variant = "primary" | "secondary";
 interface IconButtonProps {
-  icon: React.ReactNode;
-  label: string;
+  children?: React.ReactNode;
+  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   className?: string;
-  disabled?: boolean;
-  onClick?: () => void;
+  variant?: Variant;
 }
 
-export default function IconButton({ icon, label, className = '', disabled = false, onClick }: IconButtonProps) {
+
+const getVariantClass = (variant: Variant) => {
+  switch (variant) {
+    case "primary":
+      return "bg-primary hover:bg-primary-hover";
+    case "secondary":
+      return "bg-secondary hover:bg-secondary-hover";
+    default:
+      return "";
+  }
+};
+
+export default function IconButton({ children, onClick, className, variant = "primary" }: IconButtonProps) {
+  const { isBatterySaverMode } = useBatterySaver();
+
+  const onClickHandler = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
+    if (!isBatterySaverMode && 'vibrate' in navigator) {
+      navigator.vibrate(40);
+    }
+    onClick?.(event);
+  };
   return (
-    <Button onClick={onClick} ariaLabel={label} className={className} disabled={disabled}>
-      {icon}
-      {label}
-    </Button>
-  )
+    <button
+      className={`p-2 rounded-xl text-left cursor-pointer select-none transition-all active:animate-(--anim-click) ${getVariantClass(variant)} ${className}`}
+      onClick={onClickHandler}
+    >
+      {children}
+    </button>
+  );
 }

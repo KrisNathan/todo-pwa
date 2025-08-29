@@ -1,72 +1,59 @@
-import './TaskCard.css'
-import { useState, useEffect, useRef } from 'react'
-import { MdCheckBox, MdCheckBoxOutlineBlank, MdDelete, MdEdit, MdStar, MdStarOutline } from 'react-icons/md'
-import ContextMenu from './ContextMenu';
+import { MdCheckBox, MdCheckBoxOutlineBlank, MdDelete, MdEdit } from "react-icons/md";
+import type { Task } from "../interfaces/task";
+import ContextMenu from "./ContextMenu";
+import { useCallback, useRef, useState } from "react";
+import useTodoStore from "../stores/todoStore";
+import { useNavigate } from "react-router-dom";
 
-export interface TaskCardProps {
-  title: string;
-  dueDate?: string;
-  isImportant: boolean;
-  isDone?: boolean;
-  onDelete?: () => void;
-  onToggleImportant?: () => void;
-  onToggleDone?: () => void;
-  onEdit?: () => void;
+interface TaskCardProps {
+  task: Task;
+
 }
 
-export default function TaskCard({
-  title,
-  dueDate,
-  isImportant,
-  isDone = false,
-  onToggleImportant,
-  onToggleDone,
-  onEdit
-}: TaskCardProps) {
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setIsDropdownOpen(false);
-      }
-    };
-
-    if (isDropdownOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [isDropdownOpen]);
-
-
+export default function TaskCard({ task }: TaskCardProps) {
+  const navigate = useNavigate();
   const mousePosition = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
   const [isContextMenuOpen, setIsContextMenuOpen] = useState(false);
-  const handleMenuClick = () => {
-    setIsContextMenuOpen(!isContextMenuOpen);
-  };
 
-  const onMouseMove = (e: React.MouseEvent) => {
+  const { updateTask } = useTodoStore();
+
+  const toggleCompletion = useCallback(() => {
+    navigator.vibrate(50);
+    updateTask(task.id, { completed: !task.completed });
+  }, [task.id, task.completed, updateTask]);
+
+  const handleContextMenu = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setIsContextMenuOpen(true);
     mousePosition.current = { x: e.clientX, y: e.clientY };
+    navigator.vibrate(75);
   };
 
-  const toggleDoneHandler = () => {
-    if (onToggleDone) {
-      onToggleDone();
-    }
-  };
+  const handleEdit = () => { navigate(`/task/edit/${task.id}`) }
 
-  const toggleImportantHandler = () => {
-    if (onToggleImportant) {
-      onToggleImportant();
-    }
-  }
+  const handleDelete = () => { navigate(`/task/delete/${task.id}`) }
 
   return (
-    <div className='task-card' onMouseMove={onMouseMove}>
+    <>
+      <button
+        onClick={toggleCompletion}
+        onContextMenu={handleContextMenu}
+        className="flex flex-row gap-1 px-4 py-2 rounded-xl bg-secondary hover:bg-secondary-hover transition-colors items-center text-left"
+      >
+        <div className="flex-1 flex flex-col">
+          <div className={`typography-regular text-text-primary ${task.completed ? 'line-through text-text-secondary' : ''}`}>
+            {task.title}
+          </div>
+          <div className={`typography-small text-accent ${task.completed ? 'line-through text-text-secondary' : ''}`}>
+            {task.dueDate ? new Date(task.dueDate).toLocaleString() : 'No due date set'}
+          </div>
+        </div>
+        {task.completed ?
+          <MdCheckBox size={24} color="var(--fun-color-primary)" />
+          :
+          <MdCheckBoxOutlineBlank size={24} color="var(--fun-color-primary)" />
+        }
+      </button>
       <ContextMenu
         position={mousePosition.current}
         isOpen={isContextMenuOpen}
@@ -74,40 +61,10 @@ export default function TaskCard({
           setIsContextMenuOpen(false);
         }}
         items={[
-          { label: 'Edit', onClick: onEdit || (() => { }), icon: <MdEdit size={20} /> },
-          { label: 'Delete', onClick: () => console.log('Delete Task'), icon: <MdDelete size={20} /> },
+          { label: 'Edit', onClick: handleEdit, icon: <MdEdit size={20} /> },
+          { label: 'Delete', onClick: handleDelete, icon: <MdDelete size={20} /> },
         ]}
       />
-      <button
-        onClick={toggleDoneHandler}
-        onContextMenu={(e) => {
-          e.preventDefault();
-          handleMenuClick();
-        }}
-        className='text-left flex flex-row flex-1 p-0 m-0 cursor-pointer'
-      >
-        <div className='task-card-checkbox'>
-          <span className='cursor-pointer'>
-            <MdCheckBox size={24} color='var(--text-primary)' className={`${isDone ? 'scale-100' : 'scale-0 rotate-180 h-0'} transition-all`} />
-            <MdCheckBoxOutlineBlank size={24} color='var(--text-primary)' className={`${isDone ? 'scale-0 rotate-180 h-0' : 'scale-100'} transition-all`} />
-          </span>
-        </div>
-        <div className={'transition-all task-card-content ' + (isDone ? 'done' : '')}>
-          <div className='standard-bold'>{title}</div>
-          {dueDate && <div className='standard-sub'>{dueDate}</div>}
-        </div>
-      </button>
-
-      <div className='task-card-actions'>
-        <span onClick={toggleImportantHandler} className='cursor-pointer'>
-          {isImportant ?
-            <MdStar size={24} color='#ffa500' />
-            :
-            <MdStarOutline size={24} color='var(--text-secondary)' />
-          }
-        </span>
-
-      </div>
-    </div>
+    </>
   )
 }

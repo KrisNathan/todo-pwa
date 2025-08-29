@@ -35,7 +35,7 @@ export interface MenuItem {
 
 const MenuButton = ({ label, onClick, icon }: MenuItem) => (
   <button
-    className="w-full text-left px-4 py-2 hover:bg-bg-secondary-hover active:animate-(--anim-click) rounded-2xl flex flex-row gap-2 cursor-pointer"
+    className="w-full text-left px-4 py-2 hover:bg-secondary-hover active:animate-(--anim-click) rounded-xl flex flex-row gap-2 cursor-pointer"
     onClick={(e) => {
       e.stopPropagation();
       if (onClick) {
@@ -73,7 +73,7 @@ const DesktopMenu = ({ items, position, onClose }: { items: MenuItem[]; position
 
   return (
     <div
-      className="hidden md:block bg-bg-secondary p-1 rounded-2xl shadow-2xl min-w-48"
+      className="hidden md:block bg-secondary p-1 rounded-xl shadow-2xl min-w-48"
       style={{
         position: 'fixed',
         left,
@@ -104,7 +104,7 @@ const DesktopMenu = ({ items, position, onClose }: { items: MenuItem[]; position
 
 const MobileDrawer = ({ items, onClose }: { items: MenuItem[], onClose: () => void }) => (
   <div
-    className="bg-bg-secondary p-4 shadow-lg rounded-t-2xl w-full max-w-md mb-0 animate-(--anim-slide-up)"
+    className="bg-secondary p-4 shadow-lg rounded-t-xl w-full max-w-md mb-0 animate-(--anim-slide-up)"
     onClick={(e) => e.stopPropagation()}
   >
     <ul className="space-y-2">

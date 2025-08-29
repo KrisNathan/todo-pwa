@@ -1,4 +1,14 @@
-# React + TypeScript + Vite
+# To Do Progressive Web App
+
+This is a simple To Do app. The objective of this app is to be simple and privacy friendly while providing a sync feature.
+
+Privacy friendly sync feature is inspired by Brave browser's sync protocol.
+
+On this app it is achieved by encrypting data locally and then storing the data temporarily on the server with a short TTL (time to live). That data would then be pulled by your other devices and decrypted locally using your sync chain code.
+
+To prevent significant data loss, every sync conflict is merged conservatively (no destructive merging).
+
+---
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 

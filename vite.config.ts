@@ -10,11 +10,12 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: "autoUpdate",
+      injectRegister: "auto",
       manifest: {
         name: "To Do",
         short_name: "To Do",
         description: "A task management application",
-        theme_color: "#ffffff",
+        theme_color: "#000000",
         icons: [
           {
             src: "pwa-192x192.png",
@@ -29,10 +30,11 @@ export default defineConfig({
         ],
         start_url: "/",
         display: "standalone",
-        background_color: "#ffffff",
+        background_color: "#000000",
         scope: "/",
       },
       workbox: {
+        importScripts: ["/sw-custom.js"],
         globPatterns: ["**/*.{js,css,html,png,jpg,svg}"],
         runtimeCaching: [
           {
