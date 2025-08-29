@@ -1,4 +1,5 @@
 import { decryptJson, encryptJson } from "./crypto";
+import { z } from "zod";
 import type { Task } from "../interfaces/task";
 import type { Workspace } from "../interfaces/workspace";
 import useTodoStore from "../stores/todoStore";
@@ -26,6 +27,39 @@ interface EncryptedPayload {
   workspaces: SerializedWorkspace[];
 }
 
+// Zod schemas to validate and normalize remote payloads
+const SerializedTaskSchema = z
+  .object({
+    id: z.string().trim().catch(""),
+    title: z.string().catch(""),
+    completed: z.boolean().catch(false),
+    isImportant: z.boolean().catch(false),
+    listId: z.string().catch(""),
+    // Accept ISO strings or null; normalize undefined/empty to null
+    dueDate: z
+  .preprocess((v: unknown) => {
+        if (v === undefined || v === null || v === "") return null;
+        if (typeof v === "string") return v;
+        return null;
+      }, z.string().datetime().or(z.null()))
+      .catch(null),
+  })
+  .strip();
+
+const SerializedWorkspaceSchema = z
+  .object({
+    id: z.string().trim().catch(""),
+    name: z.string().catch(""),
+  })
+  .strip();
+
+const EncryptedPayloadSchema: z.ZodType<EncryptedPayload> = z
+  .object({
+    tasks: z.array(SerializedTaskSchema).default([]).catch([]),
+    workspaces: z.array(SerializedWorkspaceSchema).default([]).catch([]),
+  })
+  .strip();
+
 export default class SyncUtils {
   constructor() {}
 
@@ -52,46 +86,15 @@ export default class SyncUtils {
   }
 
   private parsePayload(obj: unknown): EncryptedPayload {
-    if (!obj || typeof obj !== "object") throw new Error("Invalid payload");
-    const rec = obj as Record<string, unknown>;
-    const tasksRaw = Array.isArray(rec.tasks) ? (rec.tasks as unknown[]) : [];
-    const workspacesRaw = Array.isArray(rec.workspaces) ? (rec.workspaces as unknown[]) : [];
-
-    const normTasks: SerializedTask[] = tasksRaw.map((t) => {
-      if (t && typeof t === "object") {
-        const r = t as Record<string, unknown>;
-        const dueVal = r.dueDate;
-        return {
-          id: String(r.id ?? ""),
-          title: String(r.title ?? ""),
-          completed: Boolean(r.completed),
-          isImportant: Boolean(r.isImportant),
-          listId: String(r.listId ?? ""),
-          dueDate: typeof dueVal === "string" ? dueVal : null,
-        };
-      }
-      return {
-        id: "",
-        title: "",
-        completed: false,
-        isImportant: false,
-        listId: "",
-        dueDate: null,
-      };
-    });
-
-    const normWorkspaces: SerializedWorkspace[] = workspacesRaw.map((w) => {
-      if (w && typeof w === "object") {
-        const r = w as Record<string, unknown>;
-        return {
-          id: String(r.id ?? ""),
-          name: String(r.name ?? ""),
-        };
-      }
-      return { id: "", name: "" };
-    });
-
-    return { tasks: normTasks.filter((t) => t.id), workspaces: normWorkspaces.filter((w) => w.id) };
+    const parsed = EncryptedPayloadSchema.safeParse(obj ?? {});
+    if (!parsed.success) {
+      throw new Error("Invalid payload");
+    }
+    const { tasks, workspaces } = parsed.data;
+    return {
+      tasks: tasks.filter((t: SerializedTask) => t.id),
+      workspaces: workspaces.filter((w: SerializedWorkspace) => w.id),
+    };
   }
 
   private async mergeRemoteIntoLocal(remote: EncryptedPayload) {
