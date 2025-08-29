@@ -3,7 +3,7 @@ import type { Task } from "../interfaces/task";
 import {
   ensureNotificationPermission,
   showNotification,
-} from "./notifications";
+} from "../utils/notifications";
 
 type Timer = {
   id: number;
@@ -95,27 +95,31 @@ function rescheduleAll() {
   for (const t of tasks) scheduleForTask(t);
 }
 
-export function startReminderScheduler() {
-  if (started) return;
-  started = true;
+export default class ReminderSchedulerInitTask {
 
-  // Initial pass
-  rescheduleAll();
+  static start() {
+    if (started) return;
+    started = true;
 
-  // Re-run when store changes
-  unsubscribeStore = useTodoStore.subscribe(() => rescheduleAll());
+    // Initial pass
+    rescheduleAll();
 
-  // Re-evaluate when tab gains visibility (timers may be throttled in background)
-  document.addEventListener("visibilitychange", () => {
-    if (document.visibilityState === "visible") {
-      rescheduleAll();
-    }
-  });
+    // Re-run when store changes
+    unsubscribeStore = useTodoStore.subscribe(() => rescheduleAll());
+
+    // Re-evaluate when tab gains visibility (timers may be throttled in background)
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "visible") {
+        rescheduleAll();
+      }
+    });
+  }
+
+  static stop() {
+    unsubscribeStore?.();
+    unsubscribeStore = null;
+    clearAllTimers();
+    started = false;
+  }
 }
 
-export function stopReminderScheduler() {
-  unsubscribeStore?.();
-  unsubscribeStore = null;
-  clearAllTimers();
-  started = false;
-}
