@@ -25,6 +25,19 @@ queueMicrotask(async () => {
   try {
     const sync = new SyncUtils();
 
+    // Ensure sync operations don't overlap: serialize push/pull via a simple promise chain
+    let syncChain: Promise<void> = Promise.resolve();
+    function queueSync<T>(op: () => Promise<T>): Promise<T> {
+      const run = () => op();
+      const p = syncChain.then(run);
+      // Keep the chain as Promise<void> regardless of op result and swallow errors to not block the chain
+      syncChain = p.then(
+        () => undefined,
+        () => undefined,
+      );
+      return p;
+    }
+
     // Helper: simple debounce
     function debounce<T extends unknown[]>(fn: (...args: T) => void, ms: number) {
       let t: number | undefined;
@@ -35,11 +48,11 @@ queueMicrotask(async () => {
     }
 
     // 1) Initial pull/push sequence
-    const pullResult = await sync.pull().catch(() => 'not-found');
+    const pullResult = await queueSync(() => sync.pull()).catch(() => 'not-found');
     if (pullResult === 'not-found') {
-      await sync.push().catch(console.error);
+      await queueSync(() => sync.push()).catch(console.error);
     } else {
-      await sync.push().catch(console.error);
+      await queueSync(() => sync.push()).catch(console.error);
     }
 
     // 2) Subscribe to store updates and push on changes (debounced)
@@ -59,10 +72,10 @@ queueMicrotask(async () => {
     };
 
     let prevSig = signature();
-  const debouncedPush = debounce<void[]>(() => {
+    const debouncedPush = debounce<void[]>(() => {
       // Skip if store not hydrated for any reason
       if (!useTodoStore.getState().hydrated) return;
-      void sync.push().catch(console.error);
+      void queueSync(() => sync.push()).catch(console.error);
     }, 1200);
 
     useTodoStore.subscribe(() => {
@@ -72,6 +85,20 @@ queueMicrotask(async () => {
         prevSig = nextSig;
         debouncedPush();
       }
+    });
+
+    // 3) Periodic pull to fetch remote updates (serialized with other sync ops)
+    const PULL_INTERVAL_MS = Number(import.meta.env.VITE_SYNC_PULL_INTERVAL_MS ?? 2 * 60 * 1000); // 2 minutes
+    const pullTimer = window.setInterval(() => {
+      // Only attempt when app is hydrated and online
+      if (!useTodoStore.getState().hydrated) return;
+      if (typeof navigator !== 'undefined' && 'onLine' in navigator && !navigator.onLine) return;
+      void queueSync(() => sync.pull()).catch(() => { });
+    }, PULL_INTERVAL_MS);
+
+    // Clean up timer if the page is being closed/refreshed
+    window.addEventListener('beforeunload', () => {
+      window.clearInterval(pullTimer);
     });
   } catch (e) {
     // Missing keys or network issues shouldn't block app start
