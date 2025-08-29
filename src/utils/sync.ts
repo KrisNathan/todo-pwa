@@ -117,6 +117,7 @@ export default class SyncUtils {
     // 2) Do NOT remove local workspaces missing from remote (local retains extras)
 
     // 3) Upsert tasks from remote
+    let diffFound = false;
     for (const remoteTask of remote.tasks) {
       const localTask = localTasksById.get(remoteTask.id);
       const due = remoteTask.dueDate ? new Date(remoteTask.dueDate) : null;
@@ -140,6 +141,7 @@ export default class SyncUtils {
           localTask.listId !== remoteTask.listId ||
           ((localTask.dueDate?.getTime() ?? -1) !== (due ? due.getTime() : -1));
         if (differs) {
+          diffFound = true;
           useTodoStore.getState().updateTask(remoteTask.id, {
             title: remoteTask.title,
             completed: remoteTask.completed,
@@ -152,6 +154,8 @@ export default class SyncUtils {
     }
 
     // 4) Do NOT remove local tasks missing from remote (local retains extras)
+
+    return diffFound;
   }
 
   async pull(): Promise<"ok" | "not-found"> {
@@ -178,13 +182,15 @@ export default class SyncUtils {
 
     const decrypted = await decryptJson(data.data.encryptedString, privateKey, publicKey);
     const payload = this.parsePayload(decrypted);
-    await this.mergeRemoteIntoLocal(payload);
-    
+    const diffFound = await this.mergeRemoteIntoLocal(payload);
+
     // After merging, push the merged state back to remote so it reflects the union
-    try {
-      await this.push();
-    } catch (err) {
-      console.warn('[sync] push after merge failed:', err);
+    if (diffFound) {
+      try {
+        await this.push();
+      } catch (err) {
+        console.warn('[sync] push after merge failed:', err);
+      }
     }
     return "ok";
   }
