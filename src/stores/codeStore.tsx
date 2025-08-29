@@ -8,6 +8,7 @@ import { persist, createJSONStorage } from 'zustand/middleware';
 import type { StateStorage } from 'zustand/middleware';
 import { get as idbGet, set as idbSet, del as idbDel } from 'idb-keyval';
 import { encryptJson, decryptJson } from '../utils/crypto';
+import SyncSchedulerInitTask from '../init_task/sync_scheduler';
 
 // Small helper to hex-encode Uint8Array
 const bytesToHex = (bytes: Uint8Array) => [...bytes].map(b => b.toString(16).padStart(2, '0')).join('');
@@ -81,14 +82,18 @@ const useCodeStore = create<State & Actions>()(
           })();
         });
 
+        SyncSchedulerInitTask.start();
+
         return code;
       },
       setSyncCode: (code) => set((state) => {
-        state.syncCode = code;
         try {
           const { privateKey, publicKey } = deriveKeysFromMnemonic(code);
           state.privateKey = privateKey;
           state.publicKey = publicKey;
+          state.syncCode = code;
+
+          SyncSchedulerInitTask.start();
         } catch {
           // If invalid mnemonic, leave keys undefined
           state.privateKey = undefined;
@@ -104,6 +109,8 @@ const useCodeStore = create<State & Actions>()(
         state.deviceName = undefined;
         state.privateKey = undefined;
         state.publicKey = undefined;
+
+        SyncSchedulerInitTask.stop();
       }),
     })),
     {
